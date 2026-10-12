@@ -265,6 +265,75 @@ export default {
       'The detector recognises sinks, toilets and toothbrushes, but not bathtubs.',
     'wake.alarmFile': 'Your alarm audio (for “My audio file”)',
 
+    // Setup guide
+    'guide.title': 'Setup guide',
+    'guide.intro':
+      'A web app can’t ring when the phone is locked or block other apps. These steps use your phone’s own Clock, Focus and Shortcuts features to fill those gaps.',
+    'guide.platform': 'Phone type',
+    'guide.ios': 'iPhone',
+    'guide.android': 'Android',
+    'guide.menuNote':
+      'Menu names can change between iOS and Android versions. If yours differ, look for similar wording.',
+    'guide.ios.install.title': '1. Install Iman',
+    'guide.ios.install.1': 'Open {url} in Safari.',
+    'guide.ios.install.2': 'Tap the Share button (the square with an arrow pointing up).',
+    'guide.ios.install.3': 'Scroll down, tap “Add to Home Screen”, then tap “Add”.',
+    'guide.ios.install.4': 'Open Iman from its new Home Screen icon (not from Safari).',
+    'guide.ios.install.5':
+      'Allow location, then turn on notifications in Settings, Reminders and adhan (iOS 16.4 or later, Home Screen app only).',
+    'guide.ios.focus.title': '2. Create a Prayer Focus',
+    'guide.ios.focus.1': 'Open the Settings app, tap Focus, then + and Custom. Name it “Prayer”.',
+    'guide.ios.focus.2':
+      'Under Notifications, choose the people and apps that may still reach you (for example family and Iman). Everything else stays silent.',
+    'guide.ios.focus.3':
+      'Optional: use Customise Screens to show a calm Home Screen page while the Focus is on.',
+    'guide.ios.auto.title': '3. Turn the Focus on at prayer times',
+    'guide.ios.auto.1':
+      'Open Shortcuts, tap Automation, then + and Time of Day. Set the time of a prayer, choose Daily, and select Run Immediately.',
+    'guide.ios.auto.2': 'Add the action “Set Focus”, choose Prayer and set it to On.',
+    'guide.ios.auto.3':
+      'Make a second Time of Day automation {min} minutes later with “Set Focus”: Prayer, Off.',
+    'guide.ios.auto.4': 'Repeat for each prayer.',
+    'guide.tradeoff':
+      'Prayer times move by a minute or so every few days, but these automations use fixed times. Either update them once a week using the list below, or set each one to the latest time of the week (the Focus then starts a little after the adhan on some days).',
+    'guide.copyWeek': 'Copy this week’s times',
+    'guide.weekCopied': 'This week’s times copied',
+    'guide.preview': 'Show the list',
+    'guide.weekHeader': 'Prayer times for {place} ({method})',
+    'guide.weekRange': 'Earliest – latest this week:',
+    'guide.weekFocus': 'Focus duration: {min} minutes after each adhan.',
+    'guide.ios.fajr.title': '4. Fajr: alarm and wake check',
+    'guide.ios.fajr.1':
+      'Set your Fajr alarm in the Clock app. It rings even when the phone is locked or silenced, which a web app can’t do.',
+    'guide.ios.fajr.2':
+      'In Shortcuts, tap Automation, then + and Alarm. Choose “Is Stopped”, pick your Fajr alarm and select Run Immediately.',
+    'guide.ios.fajr.3':
+      'Add the action “Open URLs” and paste your wake check link (copy it below).',
+    'guide.ios.fajr.4':
+      'When you stop the alarm, the wake check opens and keeps ringing until you photograph a sink (or solve the problems).',
+    'guide.ios.fajr.5':
+      'So the camera doesn’t ask every morning: in Safari tap aA, Website Settings, Camera, Allow.',
+    'guide.ios.fajr.why':
+      'Why does it open in Safari? iOS has no way for Shortcuts to open an installed web app: “Open URLs” always uses the browser and “Open App” only lists App Store apps. Safari also keeps its own storage, separate from the Home Screen app, so the link carries your wake check settings.',
+    'guide.android.install.title': '1. Install Iman',
+    'guide.android.install.1':
+      'Open {url} in Chrome and tap “Install app” in the banner, or open the ⋮ menu and choose Install app (or Add to Home screen).',
+    'guide.android.install.2':
+      'Open Iman from the app drawer and allow location and notifications.',
+    'guide.android.install.3':
+      'Samsung Internet: menu, then Add page to, Home screen. Firefox: ⋮ menu, then Install (or Add to Home screen).',
+    'guide.android.focus.title': '2. Pause distracting apps at prayer times',
+    'guide.android.focus.1':
+      'In Settings, open Digital Wellbeing & parental controls, then Focus mode (on newer phones: Modes, or Do Not Disturb). Choose the apps to pause.',
+    'guide.android.focus.2':
+      'Schedule it for prayer times, or use Modes and Routines (Samsung) or Routines to switch it on and off. The weekly update trade-off below applies here too.',
+    'guide.android.wake.title': '3. Fajr: alarm and wake check',
+    'guide.android.wake.1': 'Set your Fajr alarm in the Clock app.',
+    'guide.android.wake.2':
+      'Copy your wake check link, open it in Chrome and add it to the Home screen (⋮ menu, Add to Home screen) so it is one tap away when the alarm rings.',
+    'guide.android.wake.3':
+      'Automation apps such as Samsung Modes and Routines, Tasker or MacroDroid can open the link automatically when the alarm is dismissed.',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

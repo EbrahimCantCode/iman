@@ -31,6 +31,7 @@ import { setupAudioUnlock } from './audio.js';
 import { idbClose } from './idb.js';
 import { createFocusLock, focusWidget } from './focus.js';
 import { wakeWidget, todayLinks } from './views/wake-widget.js';
+import { createGuideView } from './views/guide.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -314,6 +315,7 @@ async function boot() {
   ctx.views.settings = createSettingsView(ctx, widgets);
   ctx.views.qibla = createQiblaView(ctx);
   ctx.views.tracker = createTrackerView(ctx);
+  ctx.views.guide = createGuideView(ctx);
 
   document.getElementById('skip-link')?.addEventListener('click', (e) => {
     e.preventDefault();
