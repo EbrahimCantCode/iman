@@ -31,7 +31,7 @@ export function createSettingsView(ctx, widgets = {}) {
   const optionLabel = (def, opt) => {
     const custom = ctx.hooks.optionLabel?.(def, opt);
     if (custom) return custom;
-    const key = `opt.${def.optionsKey}.${opt}`;
+    const key = def.optionLabel(opt);
     return has(key) ? t(key) : String(opt);
   };
   const groupLabel = (g) => (PRAYERS.includes(g) ? t(`prayer.${g}`) : t(`group.${g}`));

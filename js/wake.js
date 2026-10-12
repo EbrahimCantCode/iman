@@ -21,7 +21,7 @@ import {
 import { startAlarm, unlockAudio } from './audio.js';
 import { locationFromSettings } from './location.js';
 import { ymd, zonedParts } from './time.js';
-import { h, clear } from './ui.js';
+import { h, add, clear } from './ui.js';
 import { icon } from './icons.js';
 
 initClock();
@@ -224,7 +224,8 @@ function render() {
 }
 
 function renderReady() {
-  main.append(
+  add(
+    main,
     h('p', {
       class: 'wake-lead',
       text: t(registerMode ? 'wake.registerIntro' : 'wake.intro', { object: objectName() }),

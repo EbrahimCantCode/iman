@@ -10,6 +10,7 @@
 //   min/max/step   numbers are clamped and snapped to step
 //   options    allowed values for select / multiselect
 //   optionsKey i18n prefix for option labels ("opt.<optionsKey>.<value>")
+//   optionLabel (value) => i18n key, to reuse existing labels instead
 //   nullable   number may be null (e.g. no location yet)
 //   hidden     stored and validated, but not rendered as a plain control
 //   personal   left out of "share my setup" exports
@@ -333,7 +334,7 @@ const ENTRIES = [
     type: 'multiselect',
     section: 'focus',
     options: [...PRAYERS],
-    optionsKey: 'prayer',
+    optionLabel: (p) => `prayer.${p}`,
   },
   { key: 'focus.offset', type: 'number', section: 'focus', min: 0, max: 30, step: 1, unit: 'min' },
   {
@@ -522,6 +523,7 @@ export const SCHEMA = Object.freeze(
       help: `set.${e.key}.help`,
       optionsKey: e.key,
       ...e,
+      optionLabel: e.optionLabel ?? ((o) => `opt.${e.optionsKey ?? e.key}.${o}`),
       default: DEFAULTS[e.key],
     }),
   ),

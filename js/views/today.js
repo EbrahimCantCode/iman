@@ -195,7 +195,9 @@ export function createTodayView(ctx) {
       const label = prayerLabel(next.prayer, next.day);
       if (hero.name.dataset.key !== next.prayer + next.day) {
         clear(hero.name);
-        hero.name.append(h('span', { text: label }), arLabel(next.prayer, next.day));
+        hero.name.append(
+          ...[h('span', { text: label }), arLabel(next.prayer, next.day)].filter(Boolean),
+        );
         hero.name.dataset.key = next.prayer + next.day;
       }
       hero.time.textContent = t('today.at', { time: fmtTime(next.time, tz) });

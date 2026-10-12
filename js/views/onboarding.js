@@ -1,7 +1,7 @@
 // First-run onboarding: language -> location -> calculation method ->
 // notifications. Every step can be skipped; it can be reopened from Settings.
 
-import { h, clear, openDialog } from '../ui.js';
+import { h, add, clear, openDialog } from '../ui.js';
 import { icon } from '../icons.js';
 import { t, countryName } from '../i18n/index.js';
 import { SCHEMA_BY_KEY } from '../config/schema.js';
@@ -52,7 +52,7 @@ export function runOnboarding(ctx) {
     const def = SCHEMA_BY_KEY.get(key);
     const label = (o) => {
       const custom = ctx.hooks.optionLabel?.(def, o);
-      return custom ?? t(`opt.${def.optionsKey}.${o}`);
+      return custom ?? t(def.optionLabel(o));
     };
     const el = h(
       'select',
@@ -171,7 +171,8 @@ export function runOnboarding(ctx) {
     if (name === 'notify') {
       const on =
         ctx.values()['reminders.enabled'] && globalThis.Notification?.permission === 'granted';
-      body.append(
+      add(
+        body,
         h('h2', { id: 'onb-title', tabindex: -1, text: t('onb.notify.title') }),
         h('p', { text: t('onb.notify.body') }),
         ctx.hooks.notifyNote?.() ?? null,

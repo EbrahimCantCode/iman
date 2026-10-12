@@ -1,7 +1,7 @@
 // Custom blocks shown at the top of Settings sections (things that are
 // actions rather than plain settings). Feature modules add more via ctx.hooks.
 
-import { h, clear, toast, confirmDialog, saveJSON, pickFile } from '../ui.js';
+import { h, add, clear, toast, confirmDialog, saveJSON, pickFile } from '../ui.js';
 import { icon } from '../icons.js';
 import { t, countryName, fmtNum } from '../i18n/index.js';
 import { suggestMethod, resolveMethod } from '../config/methods.js';
@@ -271,7 +271,8 @@ export function createWidgets(ctx) {
         url.hash = '#settings/advanced';
         location.assign(url.toString());
       };
-      box.append(
+      add(
+        box,
         h(
           'div',
           { class: 'field' },
