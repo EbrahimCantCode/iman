@@ -680,7 +680,7 @@ export default {
     // Advanced
     'adv.debugTime': 'Debug time',
     'adv.debugHelp':
-      'Pretend it is this time (device time zone) to test reminders and the focus lock. Adds ?debugTime=… to the address.',
+      'Pretend it is this time (at your prayer location) to test reminders, travel mode and the focus lock. Adds ?debugTime=… to the address.',
     'adv.apply': 'Apply',
     'adv.clear': 'Back to real time',
 

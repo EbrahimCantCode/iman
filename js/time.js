@@ -119,6 +119,42 @@ export function inDailyRange(m, start, end) {
   return start < end ? m >= start && m < end : m >= start || m < end;
 }
 
+/** UTC offset of `tz` at instant `date`, in minutes (e.g. +180 for Asia/Bahrain). */
+export function tzOffsetMinutes(date, tz) {
+  const p = zonedParts(date, tz);
+  const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+  return Math.round((asUtc - Math.floor(date.getTime() / 1000) * 1000) / 60000);
+}
+
+/**
+ * The instant at which the wall clock in `tz` shows the given local time
+ * ("YYYY-MM-DDTHH:MM" or "...:SS"). Independent of the device's time zone.
+ */
+export function zonedTimeToDate(local, tz) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(local ?? '');
+  if (!m) return null;
+  const [y, mo, d, h, mi, s] = m.slice(1).map((x) => Number(x ?? 0));
+  const guess = Date.UTC(y, mo - 1, d, h, mi, s);
+  // Two passes handle offsets that change around the target (DST).
+  let t = guess - tzOffsetMinutes(new Date(guess), tz) * 60000;
+  t = guess - tzOffsetMinutes(new Date(t), tz) * 60000;
+  return new Date(t);
+}
+
+/** "YYYY-MM-DDTHH:MM:SS" wall-clock time of `date` in `tz` (for datetime-local inputs). */
+export function toZonedInput(date, tz) {
+  const p = zonedParts(date, tz);
+  return `${pad(p.year, 4)}-${pad(p.month)}-${pad(p.day)}T${pad(p.hour)}:${pad(p.minute)}:${pad(p.second)}`;
+}
+
+/** ISO 8601 with the zone's offset, e.g. "2026-10-12T11:23:50+03:00". */
+export function toZonedIso(date, tz) {
+  const off = tzOffsetMinutes(date, tz);
+  const sign = off < 0 ? '-' : '+';
+  const a = Math.abs(off);
+  return `${toZonedInput(date, tz)}${sign}${pad(Math.floor(a / 60))}:${pad(a % 60)}`;
+}
+
 /** The device's IANA time zone, or "" if unknown. */
 export function deviceTimeZone() {
   try {
