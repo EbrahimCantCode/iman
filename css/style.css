@@ -1766,3 +1766,80 @@ html:has(.focus-overlay[open]) {
 .install-card h2 {
   margin: 0;
 }
+
+/* ------------------------------------------------------------ travel */
+
+:root[dir='rtl'] .icon-mirror,
+:root[dir='rtl'] .guide-back .icon {
+  transform: scaleX(-1);
+}
+
+.travel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.2rem 0.75rem;
+  margin: 0 0 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.travel-card {
+  padding-block: 0.25rem 0.5rem;
+}
+.travel-card .set-row {
+  border-top: 0;
+}
+.travel-card.is-on {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+.travel-line {
+  margin: 0.15rem 0 0.4rem;
+  font-size: 0.9375rem;
+}
+.travel-suggest {
+  border-style: dashed;
+  border-color: var(--accent);
+}
+
+.note {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border-inline-start: 4px solid var(--accent);
+  font-size: 0.9375rem;
+}
+.note .icon {
+  flex: none;
+  margin-top: 0.15rem;
+  color: var(--accent);
+}
+
+.travel-rules {
+  margin: 0 0 0.5rem;
+  padding-inline-start: 1.2rem;
+}
+.travel-rules li {
+  margin-bottom: 0.4rem;
+}
+.travel-sources summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2rem;
+}
+.travel-sources ul {
+  margin: 0.25rem 0 0.5rem;
+  padding-inline-start: 1.2rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}

@@ -84,6 +84,7 @@ export function createTodayView(ctx) {
       ),
     );
     el.append(head);
+    for (const fn of ctx.hooks.todayTop) fn(el);
 
     if (!loc) {
       el.append(

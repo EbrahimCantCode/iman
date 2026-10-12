@@ -59,6 +59,8 @@ const SHELL = [
   'js/views/settings.js',
   'js/views/today.js',
   'js/views/tracker.js',
+  'js/views/travel-ui.js',
+  'js/views/travel.js',
   'js/views/wake-widget.js',
   'js/views/widgets.js',
   'js/wake-logic.js',

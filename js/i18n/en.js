@@ -334,6 +334,73 @@ export default {
     'guide.android.wake.3':
       'Automation apps such as Samsung Modes and Routines, Tasker or MacroDroid can open the link automatically when the alarm is dismissed.',
 
+    // Travel mode
+    'travel.title': 'Travel',
+    'travel.open': 'Open travel mode',
+    'travel.km': '{n} km',
+    'travel.mi': '{n} mi',
+    'travel.disclaimer':
+      'Rulings differ between scholars. These follow the common position of the madhab you chose. Ask a scholar you trust if unsure.',
+    'travel.started': 'Travel mode is on',
+    'travel.ended': 'Travel mode is off',
+    'travel.useHome': 'Use home for prayer times',
+    'travel.startTitle': 'Start travel mode',
+    'travel.startIntro': 'Both are optional: travel mode works without them.',
+    'travel.destination': 'Destination',
+    'travel.noDestination': 'No destination set (optional)',
+    'travel.useCurrent': 'Use my current location',
+    'travel.useForPrayer': 'Use the destination for prayer times',
+    'travel.plannedDays': 'Planned length of stay in days (optional)',
+    'travel.plannedDaysHelp': 'Count the arrival and departure days: Monday to Friday is 5 days.',
+    'travel.daysPlaceholder': 'e.g. 5',
+    'travel.startButton': 'Done',
+    'travel.dayN': 'Day {n} of your trip',
+    'travel.badge': 'Day {n}',
+    'travel.badgeAria': 'Travel mode is on, day {n}. Open travel details.',
+    'travel.limitMoreThan': 'more than {daysText}',
+    'travel.limitMoreThanExcl': 'more than {daysText}, not counting the arrival and departure days',
+    'travel.limitAtLeast': '{daysText} or more',
+    'travel.stayReminder':
+      'You’ve been here {daysText}. If you plan to stay {limit}, you’re no longer a traveller (by your madhab).',
+    'travel.plannedTooLong':
+      'You plan to stay {daysText}. By the common position of your madhab, intending to stay {limit} means you’re no longer a traveller.',
+    'travel.details': 'Travel details',
+    'travel.changeTrip': 'Edit destination or stay',
+    'travel.notTravelling': 'Travel mode is off. Switch it on when you start a journey.',
+    'travel.suggestStart':
+      'Looks like you’re travelling ({distance} from home). Turn on travel mode?',
+    'travel.suggestEnd': 'You’re back within {distance} of home. Turn off travel mode?',
+    'travel.turnOn': 'Turn on',
+    'travel.turnOff': 'Turn off',
+    'travel.setHomePrompt': 'Set your home location so Iman can tell when you’re travelling.',
+    'travel.home': 'Home location',
+    'travel.homeCurrent': 'Use my current location',
+    'travel.homeSaved': 'Home location saved',
+    'travel.homeFromLocation':
+      'Your position isn’t available, so your prayer location was saved as home.',
+    'travel.distanceFromHome': '{distance} from home',
+    'travel.rulesTitle': 'Rulings: {madhab}',
+    'travel.ruleDistance':
+      'You count as a traveller at about {distance} or more from home (commonly cited: {range}).',
+    'travel.ruleDistanceCustom': 'You count as a traveller at {distance} or more from home.',
+    'travel.ruleStay': 'You stop being a traveller when you intend to stay {limit}.',
+    'travel.ruleShortenOptional':
+      'Shortening (qasr): Dhuhr, Asr and Isha may be prayed as 2 rakʿahs, and this is recommended. Fajr and Maghrib are never shortened.',
+    'travel.ruleShortenObligatory':
+      'Shortening (qasr): Dhuhr, Asr and Isha are prayed as 2 rakʿahs. Fajr and Maghrib are never shortened.',
+    'travel.ruleCombineBoth':
+      'Combining (jamʿ): Dhuhr with Asr and Maghrib with Isha, early (jamʿ taqdim) or delayed (jamʿ taʾkhir).',
+    'travel.ruleCombineEarly':
+      'Combining (jamʿ): Dhuhr with Asr and Maghrib with Isha, early only (jamʿ taqdim).',
+    'travel.ruleCombineDelayed':
+      'Combining (jamʿ): Dhuhr with Asr and Maghrib with Isha, delayed only (jamʿ taʾkhir).',
+    'travel.ruleCombineNone': 'Combining: none.',
+    'travel.ruleCombineNoneHanafi': 'No real combining outside Arafah and Muzdalifah.',
+    'travel.ruleFormal':
+      'Option: pray Dhuhr at the end of its time and Asr at the start of its time (and the same for Maghrib and Isha). Each prayer is still in its own time, so this is not real combining.',
+    'travel.sources': 'Commonly cited in',
+    'travel.settingsLink': 'Travel settings',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

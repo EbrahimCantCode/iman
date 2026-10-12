@@ -337,6 +337,68 @@ export default {
     'guide.android.wake.3':
       'تستطيع تطبيقات الأتمتة مثل «الأوضاع والإجراءات الروتينية» من سامسونج أو Tasker أو MacroDroid فتح الرابط تلقائيًا عند إيقاف المنبّه.',
 
+    // Travel mode
+    'travel.title': 'السفر',
+    'travel.open': 'فتح وضع السفر',
+    'travel.km': '{n} كم',
+    'travel.mi': '{n} ميل',
+    'travel.disclaimer':
+      'تختلف الأحكام بين العلماء. هذه تتبع القول المشهور في المذهب الذي اخترته. اسأل عالمًا تثق به إن لم تكن متأكدًا.',
+    'travel.started': 'تم تشغيل وضع السفر',
+    'travel.ended': 'تم إيقاف وضع السفر',
+    'travel.useHome': 'استخدم المنزل لأوقات الصلاة',
+    'travel.startTitle': 'تشغيل وضع السفر',
+    'travel.startIntro': 'كلاهما اختياري: يعمل وضع السفر بدونهما.',
+    'travel.destination': 'الوجهة',
+    'travel.noDestination': 'لم تُحدَّد وجهة (اختياري)',
+    'travel.useCurrent': 'استخدم موقعي الحالي',
+    'travel.useForPrayer': 'استخدم الوجهة لأوقات الصلاة',
+    'travel.plannedDays': 'مدة الإقامة المتوقعة بالأيام (اختياري)',
+    'travel.plannedDaysHelp': 'احسب يومَي الوصول والمغادرة: من الإثنين إلى الجمعة ٥ أيام.',
+    'travel.daysPlaceholder': 'مثلًا ٥',
+    'travel.startButton': 'تم',
+    'travel.dayN': 'اليوم {n} من رحلتك',
+    'travel.badge': 'اليوم {n}',
+    'travel.badgeAria': 'وضع السفر مُفعّل، اليوم {n}. افتح تفاصيل السفر.',
+    'travel.limitMoreThan': 'أكثر من {daysText}',
+    'travel.limitMoreThanExcl': 'أكثر من {daysText} دون احتساب يومَي الوصول والمغادرة',
+    'travel.limitAtLeast': '{daysText} أو أكثر',
+    'travel.stayReminder':
+      'أنت هنا منذ {daysText}. إن نويت الإقامة {limit} فلست مسافرًا (وفق مذهبك).',
+    'travel.plannedTooLong':
+      'تنوي الإقامة {daysText}. وفق القول المشهور في مذهبك، من نوى الإقامة {limit} لا يُعدّ مسافرًا.',
+    'travel.details': 'تفاصيل السفر',
+    'travel.changeTrip': 'تعديل الوجهة أو مدة الإقامة',
+    'travel.notTravelling': 'وضع السفر متوقف. شغّله عندما تبدأ رحلتك.',
+    'travel.suggestStart': 'يبدو أنك مسافر ({distance} من منزلك). هل تريد تشغيل وضع السفر؟',
+    'travel.suggestEnd': 'عدت إلى مسافة {distance} من منزلك. هل تريد إيقاف وضع السفر؟',
+    'travel.turnOn': 'تشغيل',
+    'travel.turnOff': 'إيقاف',
+    'travel.setHomePrompt': 'حدّد موقع منزلك ليعرف إيمان متى تكون مسافرًا.',
+    'travel.home': 'موقع المنزل',
+    'travel.homeCurrent': 'استخدم موقعي الحالي',
+    'travel.homeSaved': 'تم حفظ موقع المنزل',
+    'travel.homeFromLocation': 'موقعك غير متاح، فحُفظ موقع الصلاة منزلًا.',
+    'travel.distanceFromHome': '{distance} من المنزل',
+    'travel.rulesTitle': 'الأحكام: {madhab}',
+    'travel.ruleDistance':
+      'تُعدّ مسافرًا إذا ابتعدت عن منزلك نحو {distance} أو أكثر (المشهور: {range}).',
+    'travel.ruleDistanceCustom': 'تُعدّ مسافرًا إذا ابتعدت عن منزلك {distance} أو أكثر.',
+    'travel.ruleStay': 'لا تُعدّ مسافرًا إذا نويت الإقامة {limit}.',
+    'travel.ruleShortenOptional':
+      'القصر: يجوز أداء الظهر والعصر والعشاء ركعتين، وهو مستحب. لا تُقصر الفجر والمغرب أبدًا.',
+    'travel.ruleShortenObligatory':
+      'القصر: تُصلّى الظهر والعصر والعشاء ركعتين. لا تُقصر الفجر والمغرب أبدًا.',
+    'travel.ruleCombineBoth': 'الجمع: الظهر مع العصر والمغرب مع العشاء، جمع تقديم أو جمع تأخير.',
+    'travel.ruleCombineEarly': 'الجمع: الظهر مع العصر والمغرب مع العشاء، جمع تقديم فقط.',
+    'travel.ruleCombineDelayed': 'الجمع: الظهر مع العصر والمغرب مع العشاء، جمع تأخير فقط.',
+    'travel.ruleCombineNone': 'الجمع: لا جمع.',
+    'travel.ruleCombineNoneHanafi': 'لا جمع حقيقي إلا في عرفة ومزدلفة.',
+    'travel.ruleFormal':
+      'خيار: صلِّ الظهر في آخر وقتها والعصر في أول وقتها (وكذلك المغرب والعشاء). كل صلاة تبقى في وقتها، فهذا ليس جمعًا حقيقيًا.',
+    'travel.sources': 'من المصادر المشهورة',
+    'travel.settingsLink': 'إعدادات السفر',
+
     // Install & update
     'install.title': 'ثبّت إيمان',
     'install.body': 'ثبّت إيمان لاستخدامه دون اتصال ولتلقي تنبيهات الصلاة.',

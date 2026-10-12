@@ -20,7 +20,7 @@
 //   formalCombining    Hanafi option: Dhuhr at the end of its time, Asr at the start of its
 //                      time (each prayed in its own time, so not real combining)
 //   flight             guidance shown with in-flight prayer times
-//   sources            where the position is commonly cited from
+//   sources            where the position is commonly cited from ({ en, ar })
 
 /** Only 4-rak'ah prayers are shortened (to 2). Fajr and Maghrib never are. */
 export const SHORTENED_PRAYERS = Object.freeze(['dhuhr', 'asr', 'isha']);
@@ -47,22 +47,40 @@ export const TRAVEL_RULES = Object.freeze({
   shafii: Object.freeze({
     ...MAJORITY,
     sources: Object.freeze([
-      'al-Nawawi, al-Majmuʿ Sharh al-Muhadhdhab, chapter on the traveller’s prayer',
-      'al-Nawawi, Minhaj al-Talibin, chapter on shortening and combining',
+      {
+        en: 'al-Nawawi, al-Majmuʿ Sharh al-Muhadhdhab, chapter on the traveller’s prayer',
+        ar: 'النووي، المجموع شرح المهذب، باب صلاة المسافر',
+      },
+      {
+        en: 'al-Nawawi, Minhaj al-Talibin, chapter on the traveller’s prayer',
+        ar: 'النووي، منهاج الطالبين، باب صلاة المسافر',
+      },
     ]),
   }),
   maliki: Object.freeze({
     ...MAJORITY,
     sources: Object.freeze([
-      'Khalil ibn Ishaq, al-Mukhtasar, chapter on shortening the prayer',
-      'Ibn Rushd, Bidayat al-Mujtahid, book of prayer: the traveller’s prayer',
+      {
+        en: 'Khalil ibn Ishaq, al-Mukhtasar, chapter on shortening the prayer',
+        ar: 'خليل بن إسحاق، المختصر، فصل في قصر الصلاة',
+      },
+      {
+        en: 'Ibn Rushd, Bidayat al-Mujtahid, book of prayer: the traveller’s prayer',
+        ar: 'ابن رشد، بداية المجتهد، كتاب الصلاة: صلاة المسافر',
+      },
     ]),
   }),
   hanbali: Object.freeze({
     ...MAJORITY,
     sources: Object.freeze([
-      'Ibn Qudamah, al-Mughni, chapter on the traveller’s prayer',
-      'al-Buhuti, al-Rawd al-Murbiʿ, chapter on the prayer of people with excuses',
+      {
+        en: 'Ibn Qudamah, al-Mughni, chapter on the traveller’s prayer',
+        ar: 'ابن قدامة، المغني، باب صلاة المسافر',
+      },
+      {
+        en: 'al-Buhuti, al-Rawd al-Murbiʿ, chapter on the prayer of people with excuses',
+        ar: 'البهوتي، الروض المربع، باب صلاة أهل الأعذار',
+      },
     ]),
   }),
   hanafi: Object.freeze({
@@ -77,8 +95,14 @@ export const TRAVEL_RULES = Object.freeze({
     formalCombining: true,
     flight: { seatedIfCannotStand: true, combineIfAllowed: false },
     sources: Object.freeze([
-      'al-Marghinani, al-Hidayah, chapter on the traveller’s prayer',
-      'Ibn ʿAbidin, Radd al-Muhtar, chapter on the traveller’s prayer',
+      {
+        en: 'al-Marghinani, al-Hidayah, chapter on the traveller’s prayer',
+        ar: 'المرغيناني، الهداية، باب صلاة المسافر',
+      },
+      {
+        en: 'Ibn ʿAbidin, Radd al-Muhtar, chapter on the traveller’s prayer',
+        ar: 'ابن عابدين، رد المحتار، باب صلاة المسافر',
+      },
     ]),
   }),
 });
