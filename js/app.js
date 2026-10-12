@@ -3,6 +3,7 @@
 import { initClock, now, isDebugTime } from './clock.js';
 import { getStorage } from './storage.js';
 import { createSettingsStore } from './settings.js';
+import { createTracker } from './tracker.js';
 import { createState } from './state.js';
 import {
   setLanguage,
@@ -21,6 +22,7 @@ import { h, clear } from './ui.js';
 import { icon } from './icons.js';
 import { createTodayView } from './views/today.js';
 import { createSettingsView } from './views/settings.js';
+import { createTrackerView, createStatusButton, todaySunnahCard } from './views/tracker.js';
 import { openLocationPicker } from './views/location-picker.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
@@ -32,6 +34,7 @@ initClock();
 const storage = getStorage();
 const settings = createSettingsStore({ storage });
 const state = createState({ storage });
+const tracker = createTracker({ storage });
 
 let values = settings.all();
 let revision = 0;
@@ -39,10 +42,11 @@ let scheduleCache = { key: '', value: null };
 const tickers = new Set();
 
 /** Feature hooks filled in by feature modules (tracker, notifications, ...). */
-const hooks = {};
+const hooks = { todayExtras: [], sectionWidgets: {}, tickers: [] };
 
 const ctx = {
   settings,
+  tracker,
   state,
   storage,
   hooks,
@@ -75,6 +79,15 @@ const ctx = {
 };
 
 hooks.runOnboarding = () => runOnboarding(ctx);
+
+// Tracker
+hooks.statusButton = (prayer, day, time) => createStatusButton(ctx, prayer, day, time);
+hooks.todayExtras.push((el) => {
+  const card = todaySunnahCard(ctx);
+  if (card) el.append(card);
+});
+hooks.trackerExport = () => tracker.exportData();
+hooks.trackerImport = (text) => tracker.importData(text);
 
 function locationName(loc) {
   if (!loc) return t('loc.none');
@@ -132,6 +145,7 @@ const bannerSlot = h('div', { id: 'banner-slot' });
 const viewSlot = h('div', { id: 'view' });
 let active = null;
 const dirty = new Set();
+ctx.markDirty = (name) => dirty.add(name);
 
 function renderTabbar() {
   clear(tabbar);
@@ -250,11 +264,10 @@ function tick() {
 }
 
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    // Recalculate when the app regains focus (time zone or date may have changed).
-    revision += 1;
-    tick();
-  }
+  // Recalculate when the app regains focus. The schedule cache is keyed by the
+  // location's calendar day, so a new day (or a midnight passed while the app
+  // was asleep) is picked up here without re-rendering otherwise.
+  if (document.visibilityState === 'visible') tick();
 });
 
 // ------------------------------------------------------------ boot
@@ -270,7 +283,7 @@ async function boot() {
   ctx.views.today = createTodayView(ctx);
   ctx.views.settings = createSettingsView(ctx, widgets);
   ctx.views.qibla = placeholderView('qibla');
-  ctx.views.tracker = placeholderView('tracker');
+  ctx.views.tracker = createTrackerView(ctx);
 
   document.getElementById('skip-link')?.addEventListener('click', (e) => {
     e.preventDefault();

@@ -114,7 +114,7 @@ export function createTodayView(ctx) {
         ),
       );
       renderedDay = '';
-      ctx.hooks.todayExtras?.(el);
+      for (const fn of ctx.hooks.todayExtras) fn(el);
       return;
     }
 
@@ -185,7 +185,7 @@ export function createTodayView(ctx) {
       ),
     );
 
-    ctx.hooks.todayExtras?.(el);
+    for (const fn of ctx.hooks.todayExtras) fn(el);
 
     refs = { hero, rows, schedule, tz };
     update(n);

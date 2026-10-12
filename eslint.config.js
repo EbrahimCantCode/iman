@@ -15,7 +15,10 @@ export default [
       'no-eval': 'error',
       'no-implied-eval': 'error',
       'no-new-func': 'error',
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrors: 'none' }],
+      'no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', ignoreRestSiblings: true, caughtErrors: 'none' },
+      ],
       eqeqeq: ['error', 'smart'],
       'prefer-const': 'error',
     },

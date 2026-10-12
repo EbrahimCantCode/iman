@@ -86,6 +86,36 @@ export default {
     'status.late': 'Late (qada)',
     'status.missed': 'Missed',
 
+    'status.short.prayed': 'Prayed',
+    'status.short.late': 'Late',
+    'status.short.missed': 'Missed',
+    'status.short.none': '—',
+
+    // Tracker
+    'tracker.title': 'Tracker',
+    'tracker.currentStreak': 'Current streak',
+    'tracker.bestStreak': 'Best streak',
+    'tracker.days.one': '{n} day',
+    'tracker.days.other': '{n} days',
+    'tracker.daysUnit.one': 'day',
+    'tracker.daysUnit.other': 'days',
+    'tracker.last7': 'Last 7 days',
+    'tracker.thisWeek': 'This week',
+    'tracker.ofPrayers': '{done} of {total} prayers',
+    'tracker.heatmap': 'Last 30 days',
+    'tracker.heatmapHelp': 'Tap a day to edit it.',
+    'tracker.sunnah': 'Sunnah prayers',
+    'tracker.sunnahToday': 'Sunnah today',
+    'tracker.wake': 'Wake check passed at {time}',
+    'tracker.empty': 'Tap the circle next to a prayer on the Today screen to start tracking.',
+    'tracker.ruleNote.onTime':
+      'A day counts towards your streak when all five prayers were prayed on time.',
+    'tracker.ruleNote.prayedOrLate':
+      'A day counts towards your streak when all five prayers were prayed, on time or late.',
+    'sunnah.witr': 'Witr',
+    'sunnah.duha': 'Duha',
+    'sunnah.rawatib': 'Rawatib',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

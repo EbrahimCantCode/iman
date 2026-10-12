@@ -1180,3 +1180,199 @@ fieldset.set-row {
 .dialog-x {
   margin-inline-start: auto;
 }
+
+/* ------------------------------------------------------------ tracker */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+.stat {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.stat-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.stat-unit {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.stat.is-accent .stat-value {
+  color: var(--accent);
+}
+
+.hm {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0.25rem;
+}
+.hm-labels {
+  display: grid;
+  grid-template-rows: repeat(5, 0.95rem);
+  gap: 3px;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  line-height: 0.95rem;
+}
+.hm-days {
+  display: grid;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  gap: 2px;
+}
+.hm-day {
+  display: grid;
+  grid-template-rows: repeat(5, 0.95rem) auto;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  min-width: 0;
+}
+.hm-day:hover .hm-cell {
+  filter: brightness(1.15);
+}
+.hm-day.week-start {
+  box-shadow: inset 2px 0 0 0 var(--border);
+}
+:root[dir='rtl'] .hm-day.week-start {
+  box-shadow: inset -2px 0 0 0 var(--border);
+}
+.hm-day.is-today .hm-date {
+  color: var(--accent);
+  font-weight: 700;
+}
+.hm-cell {
+  display: block;
+  width: 100%;
+  min-width: 0.65rem;
+  height: 0.95rem;
+  margin-inline: auto;
+  max-width: 1.1rem;
+  border-radius: 3px;
+  background: var(--surface-3);
+}
+.hm-cell.is-prayed {
+  background: var(--good);
+}
+.hm-cell.is-late {
+  background: var(--warn);
+}
+.hm-cell.is-missed {
+  background: var(--bad);
+}
+.hm-date {
+  color: var(--muted);
+  font-size: 0.625rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.hm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.hm-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.hm-legend .hm-cell {
+  width: 0.85rem;
+  min-width: 0;
+  height: 0.85rem;
+  margin: 0;
+}
+
+.chip-btn {
+  min-height: 2.5rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-weight: 600;
+  cursor: pointer;
+}
+.chip-btn[aria-pressed='true'] {
+  background: var(--good);
+  border-color: var(--good);
+  color: var(--bg);
+}
+
+.day-row {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+}
+.day-row:first-child {
+  border-top: 0;
+}
+.day-row-label {
+  font-weight: 600;
+}
+.seg-sm {
+  margin: 0;
+}
+.seg-opt {
+  position: relative;
+  display: grid;
+}
+.seg-opt input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.seg-opt span {
+  display: grid;
+  place-items: center;
+  min-height: 2.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.seg-opt input:checked + span {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+}
+.seg-opt.is-prayed input:checked + span {
+  background: var(--good);
+  color: var(--bg);
+}
+.seg-opt.is-late input:checked + span {
+  background: var(--warn);
+  color: var(--bg);
+}
+.seg-opt.is-missed input:checked + span {
+  background: var(--bad);
+  color: var(--bg);
+}
+.seg-opt input:focus-visible + span {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
