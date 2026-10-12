@@ -350,6 +350,7 @@ export default {
       'Get an alert at prayer time while Iman is open or running in the background. Fine-tune reminders in Settings.',
     'onb.notify.enable': 'Turn on notifications',
     'onb.notify.enabled': 'Notifications are on',
+    'onb.notify.later': 'Maybe later',
     'onb.finish': 'Start',
     'onb.skip': 'Skip setup',
 

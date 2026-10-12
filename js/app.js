@@ -23,6 +23,8 @@ import { createTodayView } from './views/today.js';
 import { createSettingsView } from './views/settings.js';
 import { openLocationPicker } from './views/location-picker.js';
 import { createWidgets } from './views/widgets.js';
+import { runOnboarding, shouldOnboard } from './views/onboarding.js';
+import { gpsPatch } from './views/location-picker.js';
 
 const TABS = ['today', 'qibla', 'tracker', 'settings'];
 
@@ -68,7 +70,11 @@ const ctx = {
   },
   addTicker: (fn) => tickers.add(fn),
   views: {},
+  /** App-wide events: 'settings' (detail = changed keys) and 'language'. */
+  bus: new EventTarget(),
 };
+
+hooks.runOnboarding = () => runOnboarding(ctx);
 
 function locationName(loc) {
   if (!loc) return t('loc.none');
@@ -213,6 +219,8 @@ settings.subscribe(async (keys) => {
   ) {
     await applyLanguage();
     rerenderAll();
+    ctx.bus.dispatchEvent(new CustomEvent('settings', { detail: keys }));
+    ctx.bus.dispatchEvent(new Event('language'));
     return;
   }
   for (const [name, view] of Object.entries(ctx.views)) {
@@ -223,6 +231,7 @@ settings.subscribe(async (keys) => {
       }
     } else dirty.add(name);
   }
+  ctx.bus.dispatchEvent(new CustomEvent('settings', { detail: keys }));
 });
 
 // ------------------------------------------------------------ tick
@@ -273,6 +282,19 @@ async function boot() {
   if (!parseRoute().name) history.replaceState(null, '', `#${values['appearance.startScreen']}`);
   onRoute();
   tick();
+
+  if (shouldOnboard(ctx)) runOnboarding(ctx);
+  else refreshGpsLocation();
+}
+
+/** "Refresh location when the app opens" (GPS mode only, silent on failure). */
+async function refreshGpsLocation() {
+  if (values['location.mode'] !== 'gps' || !values['location.autoRefresh']) return;
+  try {
+    settings.setMany(await gpsPatch());
+  } catch {
+    /* keep the cached location */
+  }
 }
 
 function placeholderView(name) {

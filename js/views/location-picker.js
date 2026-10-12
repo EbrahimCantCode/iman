@@ -147,7 +147,7 @@ export function openLocationPicker(ctx, { tab } = {}) {
                 },
                 h('span', { text: lang === 'ar' && c.ar ? c.ar : c.name }),
                 h('br'),
-                h('small', { text: cityLabel(c, { lang, country: countryName }) }),
+                h('small', { text: cityLabel(c, { lang, country: countryName, withName: false }) }),
               ),
             ),
           );

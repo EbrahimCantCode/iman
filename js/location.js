@@ -185,9 +185,9 @@ export function getPosition({ timeout = 15000, highAccuracy = false } = {}) {
 }
 
 /** Display name for a city: "Manama, Bahrain" (localised name when available). */
-export function cityLabel(city, { lang = 'en', country = (cc) => cc } = {}) {
+export function cityLabel(city, { lang = 'en', country = (cc) => cc, withName = true } = {}) {
   const name = lang === 'ar' && city.ar ? city.ar : city.name;
-  const parts = [name];
+  const parts = withName ? [name] : [];
   // Region names are only available in English.
   if (lang !== 'ar' && city.admin && city.admin !== city.name) parts.push(city.admin);
   parts.push(country(city.cc));
