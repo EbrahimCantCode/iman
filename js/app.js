@@ -32,6 +32,7 @@ import { idbClose } from './idb.js';
 import { createFocusLock, focusWidget } from './focus.js';
 import { wakeWidget, todayLinks } from './views/wake-widget.js';
 import { createGuideView } from './views/guide.js';
+import { registerServiceWorker, installCard, onInstallChange } from './pwa.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -114,6 +115,12 @@ const focusLock = createFocusLock(ctx);
 ctx.addTicker((n) => focusLock.tick(n));
 hooks.sectionWidgets.focus = () => focusWidget(ctx, focusLock);
 hooks.placeholder = (def) => (def.key === 'focus.message' ? t('focus.defaultMessage') : '');
+
+// Install help (browser prompt or iPhone instructions)
+hooks.todayExtras.push((el) => {
+  const card = installCard(ctx);
+  if (card) el.append(card);
+});
 
 // Wake check
 hooks.sectionWidgets.wake = () => wakeWidget(ctx);
@@ -330,6 +337,12 @@ async function boot() {
 
   if (shouldOnboard(ctx)) runOnboarding(ctx);
   else refreshGpsLocation();
+
+  registerServiceWorker();
+  onInstallChange(() => {
+    if (active === 'today') ctx.views.today.render();
+    else dirty.add('today');
+  });
 }
 
 /** "Refresh location when the app opens" (GPS mode only, silent on failure). */

@@ -1759,3 +1759,10 @@ html:has(.focus-overlay[open]) {
   font-size: 0.8125rem;
   white-space: pre-wrap;
 }
+
+.install-card .icon {
+  color: var(--accent);
+}
+.install-card h2 {
+  margin: 0;
+}

@@ -342,6 +342,8 @@ export default {
       'In Safari, tap Share, then “Add to Home Screen”. Notifications only work from the Home Screen app.',
     'install.iosNotSafari': 'To install on iPhone, open this page in Safari.',
     'install.dismiss': 'Not now',
+    'install.howTo': 'Show me how',
+    'update.refresh': 'Refresh',
     'update.available': 'Update available, tap to refresh',
 
     // Settings screen
