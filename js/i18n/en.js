@@ -208,6 +208,63 @@ export default {
       'A web app can’t block other apps. This shows a calm full-screen pause inside Iman at prayer time while it is open. For real app blocking, use your phone’s Focus mode; the setup guide shows how.',
     'focus.guideLink': 'Setup guide',
 
+    // Wake check
+    'wake.title': 'Wake check',
+    'wake.intro': 'Good morning! Get up and take a photo of a {object} to switch off the alarm.',
+    'wake.start': 'I’m up, start',
+    'wake.startHelp': 'Starts the alarm sound. Phones only allow sound after a tap.',
+    'wake.startingCamera': 'Starting the camera…',
+    'wake.loadingModel': 'Loading the detector… (the first time this downloads about 19 MB)',
+    'wake.aim': 'Point the camera at a {object}, then take the photo.',
+    'wake.takePhoto': 'Take a photo of a {object}',
+    'wake.checking': 'Checking…',
+    'wake.fail': 'No {object} detected, try again.',
+    'wake.tips':
+      'Tips: turn on the light, step back so the whole {object} is in the frame, and hold still.',
+    'wake.notSimilar':
+      'That doesn’t look like your registered sink ({score}% similar). Try again at your own sink.',
+    'wake.attemptsLeft.one': '{n} more try before you can solve problems instead.',
+    'wake.attemptsLeft.other': '{n} more tries before you can solve problems instead.',
+    'wake.useFallback': 'Solve problems instead',
+    'wake.cameraDenied':
+      'Camera access was denied, so solve the problems to stop the alarm. To use photos, allow the camera for this site (iPhone: Settings, Safari, Camera).',
+    'wake.cameraUnavailable':
+      'The camera isn’t available, so solve the problems to stop the alarm.',
+    'wake.modelError': 'The detector couldn’t be loaded, so solve the problems to stop the alarm.',
+    'wake.fallbackIntro': 'Solve {n} problems to stop the alarm.',
+    'wake.problemOf': 'Problem {i} of {n}',
+    'wake.answer': 'Your answer',
+    'wake.check': 'Check',
+    'wake.wrong': 'Not quite, try again.',
+    'wake.success': 'Good morning, time for Fajr',
+    'wake.successBody': 'The alarm is off. May Allah accept your prayer.',
+    'wake.openApp': 'Open Iman',
+    'wake.privacy': 'Photos are checked on this device only. They are never saved or uploaded.',
+    'wake.debugScores': 'Detections: {list} · similarity: {sim}',
+    'wake.registerTitle': 'Register your sink',
+    'wake.registerIntro':
+      'Take a clear photo of your own {object}. Later wake checks will compare their colours with it.',
+    'wake.registerStart': 'Start camera',
+    'wake.registerCapture': 'Take the reference photo',
+    'wake.registerNeedSink': 'No {object} detected in that photo. Try again.',
+    'wake.registerSaved':
+      'Reference photo saved. Copy your wake check link again so it includes the photo’s colours.',
+    'wake.backToSettings': 'Back to settings',
+    'wake.explain':
+      'Set your Fajr alarm in the Clock app. When you stop it, a Shortcuts automation opens the wake check, which keeps ringing until you photograph a sink.',
+    'wake.open': 'Open wake check',
+    'wake.copyLink': 'Copy my wake check link',
+    'wake.linkCopied': 'Wake check link copied',
+    'wake.linkHelp':
+      'Paste this link into your Shortcuts automation. It carries your wake check settings, because Safari doesn’t share storage with the Home Screen app. Copy it again after changing these settings.',
+    'wake.refSet': 'A reference photo is registered.',
+    'wake.refNone': 'No reference photo registered yet.',
+    'wake.registerRef': 'Register reference photo',
+    'wake.reRegister': 'Re-register reference photo',
+    'wake.objectsNote':
+      'The detector recognises sinks, toilets and toothbrushes, but not bathtubs.',
+    'wake.alarmFile': 'Your alarm audio (for “My audio file”)',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

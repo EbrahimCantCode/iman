@@ -30,6 +30,7 @@ import { remindersWidget } from './views/reminders-widget.js';
 import { setupAudioUnlock } from './audio.js';
 import { idbClose } from './idb.js';
 import { createFocusLock, focusWidget } from './focus.js';
+import { wakeWidget, todayLinks } from './views/wake-widget.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -112,6 +113,10 @@ const focusLock = createFocusLock(ctx);
 ctx.addTicker((n) => focusLock.tick(n));
 hooks.sectionWidgets.focus = () => focusWidget(ctx, focusLock);
 hooks.placeholder = (def) => (def.key === 'focus.message' ? t('focus.defaultMessage') : '');
+
+// Wake check
+hooks.sectionWidgets.wake = () => wakeWidget(ctx);
+hooks.todayExtras.push((el) => todayLinks(ctx, el));
 
 function locationName(loc) {
   if (!loc) return t('loc.none');

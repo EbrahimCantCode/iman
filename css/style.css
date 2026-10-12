@@ -1598,3 +1598,112 @@ fieldset.set-row {
 html:has(.focus-overlay[open]) {
   overflow: hidden;
 }
+
+.today-links {
+  justify-content: center;
+}
+
+/* ------------------------------------------------------------ wake page */
+
+.wake-app {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 1.5rem);
+  max-width: 30rem;
+}
+.wake-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.5rem 0 1rem;
+}
+.wake-head h1 {
+  margin: 0;
+}
+.wake-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: linear-gradient(160deg, var(--hero-a), var(--hero-b));
+  color: #f0c66a;
+}
+.wake-lead {
+  font-size: 1.1rem;
+}
+.wake-start {
+  min-height: 4.5rem;
+  font-size: 1.35rem;
+  margin: 1rem 0 0.5rem;
+}
+.wake-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  max-height: 55dvh;
+  margin: 0 auto 0.75rem;
+  border-radius: var(--radius);
+  background: #000;
+}
+.wake-video,
+.wake-still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wake-status {
+  text-align: center;
+}
+.wake-msg {
+  margin: 0.5rem 0;
+  font-weight: 600;
+  min-height: 1.5rem;
+}
+.wake-msg.is-error {
+  color: var(--bad);
+}
+.wake-msg.is-info {
+  color: var(--muted);
+}
+.wake-app .btn-block {
+  margin-bottom: 0.6rem;
+}
+.wake-problem {
+  margin: 1rem 0;
+  font-size: 2.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--accent);
+  direction: ltr;
+}
+.wake-answer {
+  font-size: 1.6rem;
+  text-align: center;
+  min-height: 3.5rem;
+}
+.wake-success-art {
+  display: grid;
+  place-items: center;
+  margin: 1.5rem auto 0.5rem;
+  color: var(--accent);
+}
+.wake-success {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--good);
+}
+.wake-success + .wake-lead {
+  text-align: center;
+}
+.wake-privacy {
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+.wake-privacy .icon {
+  flex: none;
+  margin-top: 0.15rem;
+}
