@@ -1,0 +1,54 @@
+name: Wrong prayer times
+description: Iman's times differ from your local mosque or official timetable
+labels: [prayer-times]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Calculated times can differ by a few minutes from local timetables. Before reporting,
+        try the calculation method your mosque uses (Settings, Prayer times) and the per-prayer
+        minute adjustments. If the difference remains, or the *suggested* method for your
+        country is wrong, tell us below.
+        A city name is enough: please don't post your exact home coordinates.
+  - type: input
+    id: location
+    attributes:
+      label: City and country
+      placeholder: e.g. Manama, Bahrain
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date
+      placeholder: e.g. 2026-10-12
+    validations:
+      required: true
+  - type: input
+    id: method
+    attributes:
+      label: Calculation method and Asr method in Iman
+      placeholder: e.g. Kuwait (suggested), Standard Asr, no adjustments
+    validations:
+      required: true
+  - type: textarea
+    id: iman
+    attributes:
+      label: Times shown by Iman
+      placeholder: Fajr 04:18, Sunrise 05:35, Dhuhr 11:24, Asr 14:44, Maghrib 17:13, Isha 18:27
+    validations:
+      required: true
+  - type: textarea
+    id: official
+    attributes:
+      label: Official times for the same date
+      placeholder: Fajr 04:17, Sunrise 05:35, ...
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Link to the official timetable
+      description: Ministry, national authority or mosque. This is what lets us fix the suggestion.
+    validations:
+      required: true

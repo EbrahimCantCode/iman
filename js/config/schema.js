@@ -22,6 +22,7 @@
 import { DEFAULTS } from './defaults.js';
 import { PRAYERS, STATUSES, WAKE_OBJECTS, ALARM_TONES, ACCENTS } from './constants.js';
 import { METHODS, AUTO_METHOD, CUSTOM_METHOD } from './methods.js';
+import { LANGUAGE_CODES } from '../i18n/index.js';
 
 export const SETTINGS_VERSION = 1;
 
@@ -477,7 +478,7 @@ const ENTRIES = [
     key: 'appearance.language',
     type: 'select',
     section: 'appearance',
-    options: ['auto', 'en', 'ar'],
+    options: ['auto', ...LANGUAGE_CODES],
   },
   {
     key: 'appearance.theme',

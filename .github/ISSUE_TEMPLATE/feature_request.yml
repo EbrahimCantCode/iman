@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an idea for Iman
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation, for example "When I travel, I ..."
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: How could Iman help? Settings, screens, behaviour.
+    validations:
+      required: true
+  - type: checkboxes
+    id: principles
+    attributes:
+      label: Iman's principles
+      description: Iman works offline, has no accounts or tracking, and makes no third-party network requests.
+      options:
+        - label: My idea fits these principles (or explains why it needs an opt-in exception).
+          required: true

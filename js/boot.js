@@ -19,11 +19,12 @@
   if (accent) root.setAttribute('data-accent', accent);
   var font = pick(v['appearance.fontSize'], ['small', 'large']);
   if (font) root.setAttribute('data-font', font);
-  var lang = pick(v['appearance.language'], ['en', 'ar']);
+  // Exact language handling happens in js/i18n; this only avoids a layout flip.
+  var lang = /^[a-z]{2,3}$/.test(v['appearance.language']) ? v['appearance.language'] : null;
   if (!lang) {
     var nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
-    lang = nav.toLowerCase().indexOf('ar') === 0 ? 'ar' : 'en';
+    lang = nav.toLowerCase().split('-')[0];
   }
   root.lang = lang;
-  root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  root.dir = ['ar', 'fa', 'he', 'ur', 'ps', 'ckb', 'yi', 'dv'].indexOf(lang) >= 0 ? 'rtl' : 'ltr';
 })();

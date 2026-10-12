@@ -1,0 +1,64 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please don't include your exact home location or other personal data.
+        Wrong prayer times? Use the "Wrong prayer times" form instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Settings, then ...
+        2. Tap ...
+        3. See ...
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - iPhone / iPad
+        - Android phone or tablet
+        - Desktop / laptop
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: OS and browser versions
+      placeholder: e.g. iOS 18.2, Safari / Android 15, Chrome 140
+    validations:
+      required: true
+  - type: dropdown
+    id: installed
+    attributes:
+      label: How do you open Iman?
+      options:
+        - Installed (Home Screen / app icon)
+        - In the browser
+        - The wake check link from a Shortcut or automation
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Iman version
+      description: Shown at the bottom of Settings.
+      placeholder: 0.1.0
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots, or a settings file from "Share my setup" (it leaves out your location).
