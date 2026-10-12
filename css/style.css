@@ -1707,3 +1707,17 @@ html:has(.focus-overlay[open]) {
   flex: none;
   margin-top: 0.15rem;
 }
+
+/* developer test bench (tests/detector.html) */
+.bench {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.bench th,
+.bench td {
+  padding: 0.35rem;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Detector test bench · Iman</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script type="module" src="detector.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <h1>Sink detector test bench</h1>
+      <p class="hint">
+        Developer tool (not part of the app). Runs the same COCO-SSD model and 640 px frame size as
+        the wake check on still images. Put photos in <code>tests/fixtures/local/</code> and open
+        <code>detector.html?images=a.jpg,b.jpg</code>, or pick files below. Nothing is uploaded.
+      </p>
+      <p><input type="file" id="files" accept="image/*" multiple aria-label="Pick images" /></p>
+      <p class="hint" id="status">Loading the model…</p>
+      <table id="results" class="bench"></table>
+    </main>
+  </body>
+</html>

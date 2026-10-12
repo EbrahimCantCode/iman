@@ -7,3 +7,4 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/
+tests/fixtures/local/
