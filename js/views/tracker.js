@@ -38,12 +38,16 @@ export function createStatusButton(ctx, prayer, day, time) {
   };
   btn.addEventListener('click', () => {
     const current = ctx.tracker.getDay(date)[prayer] ?? null;
-    ctx.tracker.setStatus(date, prayer, nextStatus(current, ctx.values()['tracker.statuses']));
+    const next = nextStatus(current, ctx.values()['tracker.statuses']);
+    // Travel mode may mark a combined pair together.
+    if (!ctx.hooks.markPrayer?.(date, prayer, next)) ctx.tracker.setStatus(date, prayer, next);
     navigator.vibrate?.(10);
     refresh();
   });
   btn.update = (now) => {
-    const notYet = Boolean(time && time > now);
+    // With early combining, Asr (or Isha) can be prayed from Dhuhr's (Maghrib's) time.
+    const start = ctx.hooks.effectiveTime?.(prayer, day) ?? time;
+    const notYet = Boolean(start && start > now);
     btn.disabled = notYet;
     btn.title = notYet ? t('today.notYet', { prayer: prayerName(prayer) }) : '';
     refresh();

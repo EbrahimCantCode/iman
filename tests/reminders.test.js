@@ -138,6 +138,40 @@ describe('buildAlerts', () => {
   });
 });
 
+describe('combined-pair reminders (travel mode)', () => {
+  const days = (values) => [
+    computeDay(MANAMA, '2026-10-12', values),
+    computeDay(MANAMA, '2026-10-13', values),
+  ];
+  const build = (combine) =>
+    buildAlerts({ days: days(base), values: base, tz: MANAMA.tz, combine }).filter(
+      (a) => a.day === '2026-10-12',
+    );
+
+  test('early combining: one alert per pair at the first prayer', () => {
+    const alerts = build({ mode: 'early', single: true });
+    assert.equal(find(alerts, '2026-10-12:at:asr'), undefined);
+    assert.equal(find(alerts, '2026-10-12:at:isha'), undefined);
+    const noon = find(alerts, '2026-10-12:combined:dhuhr');
+    assert.equal(hm(noon.time), '11:24');
+    assert.equal(noon.partner, 'asr');
+    assert.equal(hm(find(alerts, '2026-10-12:combined:maghrib').time), '17:13');
+    assert.ok(find(alerts, '2026-10-12:at:fajr'));
+  });
+
+  test('delayed combining: at the second prayer', () => {
+    const alerts = build({ mode: 'delayed', single: true });
+    assert.equal(hm(find(alerts, '2026-10-12:combined:dhuhr').time), '14:44');
+    assert.equal(hm(find(alerts, '2026-10-12:combined:maghrib').time), '18:27');
+  });
+
+  test('separate reminders unless the setting is on or combining is off', () => {
+    assert.ok(find(build({ mode: 'early', single: false }), '2026-10-12:at:asr'));
+    assert.ok(find(build({ mode: 'off', single: true }), '2026-10-12:at:asr'));
+    assert.ok(find(build(null), '2026-10-12:at:asr'));
+  });
+});
+
 describe('dueAlerts', () => {
   const t0 = new Date('2026-10-12T11:24:00+03:00');
   const mk = (id, minutesAgo) => ({ id, time: new Date(t0 - minutesAgo * 60_000) });

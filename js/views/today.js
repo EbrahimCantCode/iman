@@ -147,6 +147,9 @@ export function createTodayView(ctx) {
         ),
         h('time', { datetime: time ? time.toISOString() : '', text: fmtTime(time, tz) }),
       );
+      // e.g. "2 rakʿahs (shortened)" while travelling.
+      const note = row.minor ? null : ctx.hooks.rowNote?.(row.key);
+      if (note) li.firstChild.append(h('span', { class: 'row-note', text: note }));
       const slot = row.minor
         ? h('span', { class: 'status-spacer' })
         : (ctx.hooks.statusButton?.(row.key, schedule.today, time) ??
@@ -156,6 +159,7 @@ export function createTodayView(ctx) {
       rows.push({ ...row, li, time, slot });
     }
     el.append(list);
+    for (const fn of ctx.hooks.afterList) fn(el, schedule);
 
     // Method line
     const methodName = t(`opt.method.${schedule.today.methodId}`);
@@ -189,17 +193,25 @@ export function createTodayView(ctx) {
       return;
     }
     const { hero, rows, tz } = refs;
-    const next = nextPrayer(n, schedule);
+    // Travel mode can group prayers (Dhuhr + Asr when combining).
+    const next = ctx.hooks.nextPrayer?.(n, schedule) ?? nextPrayer(n, schedule);
     const current = currentPrayer(n, schedule);
 
     if (next) {
-      const label = prayerLabel(next.prayer, next.day);
-      if (hero.name.dataset.key !== next.prayer + next.day) {
+      const prayers = next.prayers ?? [next.prayer];
+      const key = prayers.join('+') + next.day;
+      if (hero.name.dataset.key !== key) {
         clear(hero.name);
         hero.name.append(
-          ...[h('span', { text: label }), arLabel(next.prayer, next.day)].filter(Boolean),
+          ...prayers
+            .flatMap((p, i) => [
+              i ? h('span', { class: 'plus', text: '+' }) : null,
+              h('span', { text: prayerLabel(p, next.day) }),
+              arLabel(p, next.day),
+            ])
+            .filter(Boolean),
         );
-        hero.name.dataset.key = next.prayer + next.day;
+        hero.name.dataset.key = key;
       }
       hero.time.textContent = t('today.at', { time: fmtTime(next.time, tz) });
       const remaining = next.time - n;
@@ -213,8 +225,12 @@ export function createTodayView(ctx) {
       hero.bar.style.setProperty('--p', `${(p * 100).toFixed(1)}%`);
     }
 
-    // "Asr ends in 1 h 5 min" while inside a prayer's window.
-    if (current) {
+    // "Asr ends in 1 h 5 min" while inside a prayer's window, or a combined
+    // pair that is open now ("Dhuhr + Asr together, until 14:44").
+    const travelSub = ctx.hooks.heroSub?.(n, schedule);
+    if (travelSub) {
+      hero.sub.textContent = travelSub;
+    } else if (current) {
       const day = current.day === schedule.today.day ? schedule.today : schedule.yesterday;
       const nextDay = current.day === schedule.today.day ? schedule.tomorrow : schedule.today;
       const end = windowEnd(current.prayer, day, nextDay, ctx.values()['reminders.ishaEnd']);

@@ -2,6 +2,7 @@
 // alerts. Titles are rendered later (js/notify.js) so this stays testable.
 
 import { PRAYERS } from './config/constants.js';
+import { COMBINE_PAIRS } from './config/travel-rules.js';
 import { windowEnd } from './prayer.js';
 import { weekdayOf, minutesOfDay, hmToMinutes, inDailyRange, MINUTE } from './time.js';
 
@@ -9,7 +10,7 @@ import { weekdayOf, minutesOfDay, hmToMinutes, inDailyRange, MINUTE } from './ti
  * @typedef {object} Alert
  * @property {string} id      unique per day/kind/prayer, e.g. "2026-10-12:before:asr"
  * @property {Date}   time    when to fire
- * @property {'at'|'before'|'windowEnd'|'sunrise'|'jumuah'|'fill'} kind
+ * @property {'at'|'before'|'windowEnd'|'sunrise'|'jumuah'|'fill'|'combined'} kind
  * @property {string} prayer  related prayer ("fajr" for sunrise warnings)
  * @property {string} day     calendar day the prayer belongs to
  * @property {Date}   target  the prayer time / window end the alert refers to
@@ -24,9 +25,12 @@ import { weekdayOf, minutesOfDay, hmToMinutes, inDailyRange, MINUTE } from './ti
  * @param {object[]} p.days   consecutive day times from computeDay (e.g. yesterday, today, tomorrow)
  * @param {object} p.values  settings
  * @param {string} p.tz      location time zone (for quiet hours and Fridays)
+ * @param {{mode: 'off'|'early'|'delayed', single: boolean}} [p.combine]
+ *   travel mode combining: with `single`, one alert for each combined pair
+ *   replaces the two at-time alerts
  * @returns {Alert[]} sorted by time
  */
-export function buildAlerts({ days, values, tz }) {
+export function buildAlerts({ days, values, tz, combine = null }) {
   if (!values['reminders.enabled']) return [];
   const alerts = [];
   const quietOn = values['reminders.quietHours'];
@@ -126,7 +130,35 @@ export function buildAlerts({ days, values, tz }) {
     }
   });
 
+  if (combine?.single && combine.mode !== 'off') combinePairs(alerts, days, values, combine.mode);
   return alerts.sort((a, b) => a.time - b.time);
+}
+
+/** Replace the at-time alerts of each combined pair with one alert. */
+function combinePairs(alerts, days, values, mode) {
+  for (const day of days) {
+    for (const [first, second] of COMBINE_PAIRS) {
+      const ids = [`${day.day}:at:${first}`, `${day.day}:at:${second}`];
+      const pairAlerts = alerts.filter((a) => ids.includes(a.id));
+      if (!pairAlerts.length) continue;
+      for (const a of pairAlerts) alerts.splice(alerts.indexOf(a), 1);
+      const time = mode === 'early' ? day[first] : day[second];
+      if (!time) continue;
+      alerts.push({
+        id: `${day.day}:combined:${first}`,
+        kind: 'combined',
+        prayer: first,
+        partner: second,
+        combineType: mode,
+        day: day.day,
+        time,
+        target: time,
+        sound: values[`reminders.${first}.sound`],
+        quiet: false,
+        onlyIf: null,
+      });
+    }
+  }
 }
 
 /**

@@ -401,6 +401,29 @@ export default {
     'travel.sources': 'Commonly cited in',
     'travel.settingsLink': 'Travel settings',
 
+    // Travel mode: Today screen
+    'travel.shortened': '2 rakʿahs (shortened)',
+    'travel.mayShorten': 'Can be shortened to 2 rakʿahs',
+    'travel.pairOpen': '{pair} together: {duration} left',
+    'travel.combineTitle': 'Combining (jamʿ)',
+    'travel.pairWindow': '{pair}: can be prayed together between {from} and {to}',
+    'travel.combine.off': 'Separately',
+    'travel.combine.early': 'Early (taqdim)',
+    'travel.combine.delayed': 'Delayed (taʾkhir)',
+    'travel.combineHow.early': 'Pray {pair} together in {owner}’s time, {from}–{to}.',
+    'travel.combineHow.delayed': 'Pray {pair} together in {owner}’s time, {from}–{to}.',
+    'travel.formalTitle': 'Formal combining (not real combining)',
+    'travel.formalNoon':
+      'Dhuhr at the end of its time, just before {time}, then Asr at the start of its time, from {time}.',
+    'travel.formalEvening':
+      'Maghrib at the end of its time, just before {time}, then Isha at the start of its time, from {time}.',
+    'travel.formalNote':
+      'Each prayer is still prayed in its own time. In your madhab, real combining is only at Arafah and Muzdalifah.',
+    'notify.combined.title': '{pair} (combined)',
+    'notify.combined.body.early': 'Jamʿ taqdim · {time}',
+    'notify.combined.body.delayed': 'Jamʿ taʾkhir · {time}',
+    'notify.stay.title': 'Length of stay',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

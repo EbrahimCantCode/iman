@@ -36,6 +36,7 @@ import { registerServiceWorker, installCard, onInstallChange } from './pwa.js';
 import { createTravelStore } from './travel.js';
 import { createTravelController } from './views/travel-ui.js';
 import { createTravelView, travelSettingsWidget } from './views/travel.js';
+import { installTravelToday } from './views/travel-today.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -55,7 +56,13 @@ let scheduleCache = { key: '', value: null };
 const tickers = new Set();
 
 /** Feature hooks filled in by feature modules (tracker, notifications, ...). */
-const hooks = { todayTop: [], todayExtras: [], sectionWidgets: {}, travelSections: [] };
+const hooks = {
+  todayTop: [],
+  afterList: [],
+  todayExtras: [],
+  sectionWidgets: {},
+  travelSections: [],
+};
 
 const ctx = {
   settings,
@@ -130,6 +137,7 @@ hooks.todayExtras.push((el) => {
 // Travel mode
 ctx.travel = createTravelController(ctx);
 hooks.todayTop.push((el) => ctx.travel.todayCard(el));
+installTravelToday(ctx);
 hooks.sectionWidgets.travel = () => travelSettingsWidget(ctx);
 travelStore.subscribe(() => {
   ctx.refreshToday();

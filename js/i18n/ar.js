@@ -399,6 +399,27 @@ export default {
     'travel.sources': 'من المصادر المشهورة',
     'travel.settingsLink': 'إعدادات السفر',
 
+    // Travel mode: Today screen
+    'travel.shortened': 'ركعتان (قصر)',
+    'travel.mayShorten': 'يجوز قصرها ركعتين',
+    'travel.pairOpen': '{pair} جمعًا: متبقٍ {duration}',
+    'travel.combineTitle': 'الجمع',
+    'travel.pairWindow': '{pair}: يجوز جمعهما بين {from} و{to}',
+    'travel.combine.off': 'كلٌّ في وقتها',
+    'travel.combine.early': 'جمع تقديم',
+    'travel.combine.delayed': 'جمع تأخير',
+    'travel.combineHow.early': 'صلِّ {pair} جمعًا في وقت {owner}، {from}–{to}.',
+    'travel.combineHow.delayed': 'صلِّ {pair} جمعًا في وقت {owner}، {from}–{to}.',
+    'travel.formalTitle': 'الجمع الصوري (ليس جمعًا حقيقيًا)',
+    'travel.formalNoon': 'الظهر في آخر وقتها قُبيل {time}، ثم العصر في أول وقتها من {time}.',
+    'travel.formalEvening': 'المغرب في آخر وقتها قُبيل {time}، ثم العشاء في أول وقتها من {time}.',
+    'travel.formalNote':
+      'تبقى كل صلاة في وقتها. والجمع الحقيقي في مذهبك إنما يكون في عرفة ومزدلفة.',
+    'notify.combined.title': '{pair} (جمعًا)',
+    'notify.combined.body.early': 'جمع تقديم · {time}',
+    'notify.combined.body.delayed': 'جمع تأخير · {time}',
+    'notify.stay.title': 'مدة الإقامة',
+
     // Install & update
     'install.title': 'ثبّت إيمان',
     'install.body': 'ثبّت إيمان لاستخدامه دون اتصال ولتلقي تنبيهات الصلاة.',

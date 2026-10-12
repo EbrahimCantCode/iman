@@ -1843,3 +1843,27 @@ html:has(.focus-overlay[open]) {
   color: var(--muted);
   font-size: 0.875rem;
 }
+
+.prayer-row .name {
+  flex-wrap: wrap;
+}
+.row-note {
+  flex-basis: 100%;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.hero-name .plus {
+  color: var(--hero-muted);
+  font-weight: 400;
+}
+.combine-card h2 {
+  margin-bottom: 0.5rem;
+}
+.combine-card .seg {
+  margin-top: 0.75rem;
+}
+.hero-name {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
