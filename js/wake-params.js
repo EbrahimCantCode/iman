@@ -56,8 +56,11 @@ export function parseWakeParams(search, stored) {
   return { values, fromUrl };
 }
 
-/** Build the user's wake check link from their settings. */
-export function buildWakeLink(base, values) {
+/**
+ * Build the user's wake check link from their settings. `lang` is the
+ * language in use (so "Follow device" still opens in the same language).
+ */
+export function buildWakeLink(base, values, lang = null) {
   const url = new URL(base);
   url.search = '';
   url.hash = '';
@@ -74,6 +77,7 @@ export function buildWakeLink(base, values) {
     set('ref', values['wake.refHist']);
     set('refThreshold', values['wake.refThreshold']);
   }
-  if (values['appearance.language'] !== 'auto') set('lang', values['appearance.language']);
+  const language = values['appearance.language'] !== 'auto' ? values['appearance.language'] : lang;
+  if (language) set('lang', language);
   return url.toString();
 }

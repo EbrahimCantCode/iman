@@ -46,6 +46,20 @@ export async function setLanguage(code, opts = {}) {
   return lang;
 }
 
+/**
+ * Switch the app language in place (no reload): load the pack, then set
+ * <html lang> and <html dir>. Returns the language code now in use.
+ * @param {Document} doc
+ * @param {string} setting "auto" | a language code
+ */
+export async function applyDocumentLanguage(doc, setting, opts = {}) {
+  const code = resolveLanguage(setting, opts.navLanguages);
+  await setLanguage(code, opts);
+  doc.documentElement.lang = code;
+  doc.documentElement.dir = dir();
+  return code;
+}
+
 /** Synchronous variant for tests and for languages already loaded. */
 export function useLanguage(pack, opts = {}) {
   loaded.set(pack.code, pack);

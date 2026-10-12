@@ -2,12 +2,16 @@
 
 import { h, clear, toast, copyText, pickFile } from '../ui.js';
 import { icon } from '../icons.js';
-import { t } from '../i18n/index.js';
+import { t, currentLanguage } from '../i18n/index.js';
 import { buildWakeLink } from '../wake-params.js';
 import { audioFileName, saveAudioFile, removeAudioFile } from '../audio.js';
 
 export function wakeLink(ctx) {
-  return buildWakeLink(new URL('wake.html', location.href).toString(), ctx.values());
+  return buildWakeLink(
+    new URL('wake.html', location.href).toString(),
+    ctx.values(),
+    currentLanguage(),
+  );
 }
 
 export function wakeWidget(ctx) {

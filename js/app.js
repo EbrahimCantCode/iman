@@ -6,10 +6,8 @@ import { createSettingsStore } from './settings.js';
 import { createTracker } from './tracker.js';
 import { createState } from './state.js';
 import {
-  setLanguage,
-  resolveLanguage,
+  applyDocumentLanguage,
   t,
-  dir,
   currentLanguage,
   fmtNum,
   fmtTime,
@@ -189,13 +187,10 @@ function applyAppearance() {
 }
 
 async function applyLanguage() {
-  const code = resolveLanguage(values['appearance.language']);
-  await setLanguage(code, {
+  await applyDocumentLanguage(document, values['appearance.language'], {
     numerals: values['appearance.numerals'],
     timeFormat: values['prayer.timeFormat'],
   });
-  document.documentElement.lang = code;
-  document.documentElement.dir = dir();
   const skip = document.getElementById('skip-link');
   if (skip) skip.textContent = t('common.skipToContent');
   document.getElementById('tabbar')?.setAttribute('aria-label', t('nav.main'));
