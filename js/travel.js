@@ -15,7 +15,8 @@ import { STORAGE_KEYS } from './config/constants.js';
 import { haversineKm, validCoords } from './location.js';
 import { readJSON, writeJSON, isPlainObject } from './storage.js';
 import { daysBetween, isYmd, addDays } from './time.js';
-import { windowEnd } from './prayer.js';
+import { windowEnd, computeDay } from './prayer.js';
+import { suggestMethod } from './config/methods.js';
 
 export const KM_PER_MILE = 1.609344;
 
@@ -367,6 +368,26 @@ export function tripToOffer(data, today) {
       (t) => t.start <= today && today <= t.end && !data.offeredTrips.includes(t.id),
     ) ?? null
   );
+}
+
+/**
+ * Settings to use for a trip's destination: the method suggested for the
+ * destination country when the trip says "suggested", otherwise the user's.
+ */
+export function tripValues(trip, values) {
+  return trip.method === 'suggested'
+    ? { ...values, 'prayer.method': suggestMethod(trip.destination.country) }
+    : values;
+}
+
+/**
+ * Prayer times at the destination for every day of a trip, computed for the
+ * destination's calendar days (format them in `trip.destination.tz`).
+ */
+export function tripTimes(trip, values) {
+  const v = tripValues(trip, values);
+  const loc = { ...trip.destination, tz: trip.destination.tz || 'UTC' };
+  return tripDates(trip).map((date) => computeDay(loc, date, v));
 }
 
 /** Calendar days of a trip, inclusive. */

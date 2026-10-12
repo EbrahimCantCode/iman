@@ -59,6 +59,7 @@ const SHELL = [
   'js/views/settings.js',
   'js/views/today.js',
   'js/views/tracker.js',
+  'js/views/trip-planner.js',
   'js/views/travel-today.js',
   'js/views/travel-ui.js',
   'js/views/travel.js',

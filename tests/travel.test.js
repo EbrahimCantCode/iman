@@ -20,6 +20,8 @@ import {
   validateTravelData,
   tripToOffer,
   toUnits,
+  tripTimes,
+  tripDates,
 } from '../js/travel.js';
 import { TRAVEL_RULES, TRAVEL_MADHABS } from '../js/config/travel-rules.js';
 import { getSchedule } from '../js/prayer.js';
@@ -387,5 +389,68 @@ describe('travel store', () => {
     const storage = createMemoryStorage();
     createTravelStore({ storage }).start({ startDate: '2026-10-12', plannedDays: 3 });
     assert.equal(createTravelStore({ storage }).current().plannedDays, 3);
+  });
+});
+
+describe('trip planner times', () => {
+  const london = {
+    lat: 51.509,
+    lon: -0.126,
+    name: 'London',
+    nameAr: 'لندن',
+    country: 'GB',
+    tz: 'Europe/London',
+  };
+  const lhm = (d) =>
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/London',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).format(d);
+
+  test('one entry per day, in the destination’s calendar', () => {
+    const trip = {
+      id: 't',
+      destination: london,
+      start: '2026-10-23',
+      end: '2026-10-27',
+      method: 'suggested',
+    };
+    assert.deepEqual(tripDates(trip), [
+      '2026-10-23',
+      '2026-10-24',
+      '2026-10-25',
+      '2026-10-26',
+      '2026-10-27',
+    ]);
+    const original = process.env.TZ;
+    process.env.TZ = 'Asia/Bahrain'; // the phone hasn't switched zones yet
+    try {
+      const days = tripTimes(trip, base);
+      assert.equal(days.length, 5);
+      assert.equal(days[0].methodId, 'MoonsightingCommittee'); // suggested for GB
+      // UK clocks go back on 25 October: Dhuhr moves from ~12:50 BST to ~11:50 GMT.
+      assert.match(lhm(days[1].dhuhr), /^12:[45][0-9]$/);
+      assert.match(lhm(days[2].dhuhr), /^11:[45][0-9]$/);
+    } finally {
+      if (original === undefined) delete process.env.TZ;
+      else process.env.TZ = original;
+    }
+  });
+
+  test('"keep mine" uses the user’s method', () => {
+    const trip = {
+      id: 't',
+      destination: london,
+      start: '2026-10-12',
+      end: '2026-10-12',
+      method: 'mine',
+    };
+    assert.equal(tripTimes(trip, base)[0].methodId, 'Kuwait');
+    assert.equal(
+      tripTimes({ ...trip, method: 'suggested' }, base)[0].methodId,
+      'MoonsightingCommittee',
+    );
   });
 });

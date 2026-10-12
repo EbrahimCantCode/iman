@@ -53,7 +53,25 @@ export function createTravelView(ctx) {
   const el = h('section', { class: 'view view-travel', 'aria-labelledby': 'travel-title' });
   const travel = () => ctx.travel;
 
+  // Sub-pages: #travel/trip/<id>, #travel/flight (registered by feature modules).
+  let sub = '';
+  let rest = [];
+
   function render() {
+    const subview = ctx.hooks.travelSubviews[sub];
+    if (subview) {
+      clear(el);
+      el.append(
+        h(
+          'a',
+          { class: 'btn btn-ghost guide-back', href: '#travel' },
+          icon('back', { className: 'icon-mirror' }),
+          t('travel.title'),
+        ),
+      );
+      subview(el, rest);
+      return;
+    }
     clear(el);
     const v = ctx.values();
     const c = travel();
@@ -189,7 +207,19 @@ export function createTravelView(ctx) {
     else ctx.markDirty?.('travel');
   });
 
-  return { el, render, title: () => t('travel.title') };
+  return {
+    el,
+    render,
+    onShow(s = '', r = []) {
+      if (s !== sub || r.join('/') !== rest.join('/')) {
+        sub = s;
+        rest = r;
+        render();
+        window.scrollTo(0, 0);
+      }
+    },
+    title: () => t('travel.title'),
+  };
 }
 
 /** Settings → Travel: home location, link to the Travel screen and the disclaimer. */
