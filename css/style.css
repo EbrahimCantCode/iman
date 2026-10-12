@@ -1478,3 +1478,13 @@ fieldset.set-row {
   font-weight: 600;
   min-height: 2rem;
 }
+
+.audio-row {
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.audio-row .hint {
+  margin: 0;
+  overflow-wrap: anywhere;
+}

@@ -143,6 +143,54 @@ export default {
       'Move your phone in a figure-8 a few times to calibrate it, and keep it away from metal, magnets and other electronics. Hold it flat.',
     'qibla.needLocation': 'Set your location to find the Qibla.',
 
+    // Notifications
+    'notify.at.title': 'It’s time for {prayer}',
+    'notify.at.body': '{time} · {place}',
+    'notify.before.title': '{prayer} in {duration}',
+    'notify.before.body': 'At {time}',
+    'notify.windowEnd.title': '{prayer} ends in {duration}',
+    'notify.windowEnd.body': 'Pray before {time}.',
+    'notify.sunrise.title': '{duration} until sunrise',
+    'notify.sunrise.body': 'Pray Fajr if you haven’t yet.',
+    'notify.jumuah.title': 'Jumuʿah in {duration}',
+    'notify.jumuah.body': 'Dhuhr is at {time}. Time to get ready.',
+    'notify.fill.title': 'How did today go?',
+    'notify.fill.body': 'Some of today’s prayers aren’t marked yet. Tap to fill them in.',
+    'notify.on': 'Notifications are on.',
+    'notify.off': 'Notifications are off. Switch them on below.',
+    'notify.blocked':
+      'Notifications are blocked for Iman. Allow them in your browser or phone settings, then switch them on again.',
+    'notify.denied': 'Notification permission was not given, so reminders stay off.',
+    'notify.unsupported': 'This browser can’t show notifications.',
+    'notify.iosInstall':
+      'On iPhone, add Iman to your Home Screen first (Share, then “Add to Home Screen”) and open it from there. Notifications need iOS 16.4 or later.',
+    'notify.closedApp':
+      'Alerts are reliable while Iman is open or in a background tab. When the app is closed, alerts are not guaranteed, especially on iPhone. For anything you can’t miss, use the Clock app and Focus automations (see the setup guide).',
+    'notify.triggers': 'This browser can also schedule alerts while Iman is closed.',
+    'notify.test': 'Test notification',
+    'notify.testTitle': 'Iman',
+    'notify.testBody': 'Notifications are working.',
+    'notify.stopAdhan': 'Stop',
+
+    // Audio
+    'audio.testAdhan': 'Play adhan',
+    'audio.testChime': 'Play chime',
+    'audio.playing': 'Playing the adhan',
+    'audio.noAdhan': 'No adhan audio added yet, so the chime plays instead.',
+    'audio.files': 'Your adhan audio',
+    'audio.filesHelp':
+      'Iman doesn’t include an adhan recording. Add your own audio file; it stays on this device.',
+    'audio.adhan': 'Adhan',
+    'audio.adhan-fajr': 'Fajr adhan',
+    'audio.alarm': 'Alarm audio',
+    'audio.none': 'None (the chime plays instead)',
+    'audio.noneFajr': 'None (the normal adhan plays instead)',
+    'audio.add': 'Add file',
+    'audio.replace': 'Replace',
+    'audio.saved': 'Saved {name}',
+    'audio.tooLarge': 'That file is too large (15 MB max).',
+    'audio.notAudio': 'That doesn’t look like an audio file.',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

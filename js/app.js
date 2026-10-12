@@ -25,6 +25,10 @@ import { createSettingsView } from './views/settings.js';
 import { createTrackerView, createStatusButton, todaySunnahCard } from './views/tracker.js';
 import { openLocationPicker } from './views/location-picker.js';
 import { createQiblaView } from './views/qibla.js';
+import { createNotifier, notificationSupport } from './notify.js';
+import { remindersWidget } from './views/reminders-widget.js';
+import { setupAudioUnlock } from './audio.js';
+import { idbClose } from './idb.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -89,6 +93,18 @@ hooks.todayExtras.push((el) => {
 });
 hooks.trackerExport = () => tracker.exportData();
 hooks.trackerImport = (text) => tracker.importData(text);
+
+// Notifications and reminders
+const notifier = createNotifier(ctx);
+ctx.notifier = notifier;
+ctx.addTicker((n) => notifier.tick(n));
+hooks.enableNotifications = () => notifier.enable();
+hooks.sectionWidgets.reminders = () => remindersWidget(ctx, notifier);
+hooks.notifyNote = () =>
+  notificationSupport() === 'ios-install'
+    ? h('p', { class: 'hint', text: t('notify.iosInstall') })
+    : null;
+hooks.deleteFiles = () => idbClose();
 
 function locationName(loc) {
   if (!loc) return t('loc.none');
@@ -274,6 +290,7 @@ document.addEventListener('visibilitychange', () => {
 // ------------------------------------------------------------ boot
 
 async function boot() {
+  setupAudioUnlock();
   applyAppearance();
   await applyLanguage();
 
