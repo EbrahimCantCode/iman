@@ -1376,3 +1376,105 @@ fieldset.set-row {
   outline: 3px solid var(--accent);
   outline-offset: 1px;
 }
+
+/* ------------------------------------------------------------ qibla */
+
+.compass {
+  width: min(78vw, 20rem);
+  margin: 0.5rem auto 1rem;
+}
+.compass svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.dial-face {
+  fill: var(--surface);
+  stroke: var(--border);
+  stroke-width: 2;
+  transition:
+    stroke 0.2s,
+    fill 0.2s;
+}
+.tick {
+  stroke: var(--muted);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+.tick-long {
+  stroke-width: 2;
+  opacity: 1;
+}
+.cardinal {
+  fill: var(--muted);
+  font-size: 18px;
+  font-weight: 700;
+}
+.cardinal-n {
+  fill: var(--bad);
+}
+.qibla-line {
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 6 6;
+}
+.kaaba-body {
+  fill: #1b1b1b;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.kaaba-band {
+  fill: #e0b354;
+}
+.phone-mark {
+  fill: var(--text);
+}
+.hub {
+  fill: var(--accent);
+}
+.compass.is-aligned .dial-face {
+  stroke: var(--good);
+  stroke-width: 6;
+  fill: color-mix(in srgb, var(--good) 14%, var(--surface));
+}
+.compass.is-aligned .qibla-line {
+  stroke: var(--good);
+  stroke-dasharray: none;
+}
+.compass.is-static .phone-mark {
+  opacity: 0.25;
+}
+.qibla-info {
+  text-align: center;
+}
+.qibla-info p {
+  margin: 0 0 0.25rem;
+}
+.qibla-bearing {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.qibla-heading {
+  margin-top: 0.75rem !important;
+  font-weight: 600;
+}
+.qibla-status {
+  min-height: 1.5rem;
+  color: var(--good);
+  font-weight: 700;
+}
+.qibla-hint {
+  min-height: 1.4rem;
+}
+.qibla-help {
+  margin-top: 1rem;
+}
+.qibla-help summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2rem;
+}

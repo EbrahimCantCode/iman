@@ -24,6 +24,7 @@ import { createTodayView } from './views/today.js';
 import { createSettingsView } from './views/settings.js';
 import { createTrackerView, createStatusButton, todaySunnahCard } from './views/tracker.js';
 import { openLocationPicker } from './views/location-picker.js';
+import { createQiblaView } from './views/qibla.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -282,7 +283,7 @@ async function boot() {
   const widgets = createWidgets(ctx);
   ctx.views.today = createTodayView(ctx);
   ctx.views.settings = createSettingsView(ctx, widgets);
-  ctx.views.qibla = placeholderView('qibla');
+  ctx.views.qibla = createQiblaView(ctx);
   ctx.views.tracker = createTrackerView(ctx);
 
   document.getElementById('skip-link')?.addEventListener('click', (e) => {
@@ -308,15 +309,6 @@ async function refreshGpsLocation() {
   } catch {
     /* keep the cached location */
   }
-}
-
-function placeholderView(name) {
-  const el = h('section', { class: 'view' });
-  return {
-    el,
-    render: () => el.replaceChildren(h('h1', { class: 'view-title', text: t(`tab.${name}`) })),
-    title: () => t(`tab.${name}`),
-  };
 }
 
 boot().catch((err) => {

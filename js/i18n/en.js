@@ -116,6 +116,33 @@ export default {
     'sunnah.duha': 'Duha',
     'sunnah.rawatib': 'Rawatib',
 
+    // Qibla
+    'qibla.title': 'Qibla',
+    'qibla.n': 'N',
+    'qibla.e': 'E',
+    'qibla.s': 'S',
+    'qibla.w': 'W',
+    'qibla.fromNorth': 'from true North',
+    'qibla.distance': '{km} km to Makkah',
+    'qibla.dialLabel': 'Compass dial. The Qibla is {deg}° from North.',
+    'qibla.start': 'Start compass',
+    'qibla.permission':
+      'Tap “Start compass” and allow motion & orientation access to use the live compass.',
+    'qibla.waiting': 'Hold your phone flat…',
+    'qibla.heading': 'Facing {deg}°',
+    'qibla.aligned': 'You are facing the Qibla',
+    'qibla.turnLeft': 'Turn left {deg}°',
+    'qibla.turnRight': 'Turn right {deg}°',
+    'qibla.static': 'The dial shows the Qibla relative to North (N at the top).',
+    'qibla.noSensor':
+      'No compass found on this device. Face {deg}° from North, using a physical compass or a map.',
+    'qibla.denied': 'Motion access was not allowed. You can still use the bearing above.',
+    'qibla.lowAccuracy': 'Compass accuracy is low: calibrate it.',
+    'qibla.calibrateTitle': 'Compass seems off?',
+    'qibla.calibrate':
+      'Move your phone in a figure-8 a few times to calibrate it, and keep it away from metal, magnets and other electronics. Hold it flat.',
+    'qibla.needLocation': 'Set your location to find the Qibla.',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',
