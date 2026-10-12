@@ -1766,3 +1766,239 @@ html:has(.focus-overlay[open]) {
 .install-card h2 {
   margin: 0;
 }
+
+/* ------------------------------------------------------------ travel */
+
+:root[dir='rtl'] .icon-mirror,
+:root[dir='rtl'] .guide-back .icon {
+  transform: scaleX(-1);
+}
+
+.travel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.2rem 0.75rem;
+  margin: 0 0 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  color: var(--text);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.travel-card {
+  padding-block: 0.25rem 0.5rem;
+}
+.travel-card .set-row {
+  border-top: 0;
+}
+.travel-card.is-on {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+}
+.travel-line {
+  margin: 0.15rem 0 0.4rem;
+  font-size: 0.9375rem;
+}
+.travel-suggest {
+  border-style: dashed;
+  border-color: var(--accent);
+}
+
+.note {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border-inline-start: 4px solid var(--accent);
+  font-size: 0.9375rem;
+}
+.note .icon {
+  flex: none;
+  margin-top: 0.15rem;
+  color: var(--accent);
+}
+
+.travel-rules {
+  margin: 0 0 0.5rem;
+  padding-inline-start: 1.2rem;
+}
+.travel-rules li {
+  margin-bottom: 0.4rem;
+}
+.travel-sources summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2rem;
+}
+.travel-sources ul {
+  margin: 0.25rem 0 0.5rem;
+  padding-inline-start: 1.2rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.prayer-row .name {
+  flex-wrap: wrap;
+}
+.row-note {
+  flex-basis: 100%;
+  color: var(--accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.hero-name .plus {
+  color: var(--hero-muted);
+  font-weight: 400;
+}
+.combine-card h2 {
+  margin-bottom: 0.5rem;
+}
+.combine-card .seg {
+  margin-top: 0.75rem;
+}
+.hero-name {
+  flex-wrap: wrap;
+  row-gap: 0;
+}
+
+.hm-day {
+  position: relative;
+}
+.hm-travel {
+  position: absolute;
+  top: -0.85rem;
+  inset-inline: 0;
+  text-align: center;
+  font-size: 0.625rem;
+  color: var(--accent);
+}
+.hm {
+  margin-top: 1.1rem;
+}
+.day-travel {
+  margin-top: 0.75rem;
+}
+.day-flags {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem;
+  cursor: pointer;
+}
+.check input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--accent);
+}
+
+/* ------------------------------------------------------------ trip planner */
+
+.trip-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+}
+.trip-link {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+.trip-link:hover strong {
+  color: var(--accent);
+}
+.trip-qibla {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+.trip-qibla p {
+  margin: 0;
+}
+.trip-qibla .icon {
+  flex: none;
+  color: var(--accent);
+}
+.trip-day summary {
+  cursor: pointer;
+  font-weight: 700;
+  min-height: 2rem;
+}
+.trip-table {
+  width: 100%;
+  margin-top: 0.5rem;
+  border-collapse: collapse;
+}
+.trip-table th,
+.trip-table td {
+  padding: 0.35rem 0.25rem;
+  border-top: 1px solid var(--border);
+  text-align: start;
+  font-variant-numeric: tabular-nums;
+}
+.trip-table thead th {
+  border-top: 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.trip-table tbody th {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------ flights */
+
+.flight-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.airport-chosen {
+  min-height: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.flight-timeline {
+  list-style: none;
+  margin: 0.75rem 0;
+  padding: 0;
+  border-inline-start: 3px solid var(--accent);
+}
+.flight-event {
+  position: relative;
+  padding: 0.35rem 0 0.75rem;
+  padding-inline-start: 1rem;
+}
+.flight-event::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -0.45rem;
+  top: 0.6rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.flight-event.is-minor::before {
+  background: var(--surface-3);
+}
+.flight-qibla {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

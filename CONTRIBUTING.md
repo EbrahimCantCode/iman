@@ -37,13 +37,17 @@ js/boot.js                tiny pre-paint script (theme, direction) - the only cl
 js/config/defaults.js     every default value in ONE place
 js/config/schema.js       every setting: type, range, options, section, labels
 js/config/methods.js      country -> suggested calculation method
+js/config/travel-rules.js travel rulings per madhab (the ONLY place rulings live)
 js/config/constants.js    fixed vocabularies (prayers, statuses, storage keys)
 js/settings.js            validate / clamp / migrate / import / export settings
 js/prayer.js              adhan wrapper: times, next prayer, prayer windows
 js/time.js, clock.js      time-zone helpers, ?debugTime clock
 js/location.js            GPS, city search, nearest city
 js/qibla.js               bearing, compass smoothing
-js/tracker.js             tracker storage, streaks, stats
+js/tracker.js             tracker storage, streaks, stats, travel flags
+js/travel.js              travel mode logic: rules in effect, suggestions, stay, combining, trips
+js/flight.js              in-flight prayer times along the great-circle route
+js/airports.js            bundled airports: load, search, nearest
 js/reminders.js           which alerts fire when (pure)
 js/notify.js              showing notifications, permissions
 js/audio.js, idb.js       chime/alarm synthesis, user audio files (IndexedDB)
@@ -53,8 +57,9 @@ js/pwa.js                 service worker registration, install prompt
 js/views/*.js             screens and settings widgets
 js/i18n/*.js              strings (en.js is the reference)
 data/cities.json          bundled GeoNames city list
+data/airports.json        bundled OurAirports list (large/medium airports with IATA codes)
 lib/                      vendored adhan, tfjs, coco-ssd (+ model) with licenses
-scripts/                  vendor, build-cities, make-icons, dev server
+scripts/                  vendor, build-cities, build-airports, make-icons, dev server
 tests/                    node:test unit tests, detector test bench
 ```
 
@@ -82,6 +87,42 @@ Edit `COUNTRY_METHODS` in `js/config/methods.js` (ISO 3166-1 alpha-2 code → me
 link the official source (ministry, national authority) in your pull request. If your
 country uses parameters no built-in method matches, describe them in an issue: we may add
 a method.
+
+## How to propose a correction to the travel rulings
+
+All travel rulings (distance, length of stay, shortening, combining, in-flight guidance)
+live in one file: `js/config/travel-rules.js`. The app never states a ruling that isn't in
+that file. The values are the commonly cited positions per madhab and are marked for review
+by a qualified scholar.
+
+To propose a correction:
+
+1. Open an issue or a pull request that changes **only** `js/config/travel-rules.js` (and
+   the matching sentence in `js/i18n/*.js` if the wording must change).
+2. **Include a source**: the book and chapter (for example "Ibn Qudamah, al-Mughni, chapter on
+   the traveller's prayer"), or a fatwa from a recognised body, with a link if one exists.
+   Add it to the `sources` list of that madhab in English and Arabic.
+3. Explain which madhab and which field (`distanceKm`, `maxStayDays`, `stayLimit`,
+   `excludeArrivalDeparture`, `shortening`, `combining`, ...) and why.
+
+Pull requests without a source can't be merged. Remember that users can always override the
+numbers with the Custom madhab, so a correction should reflect the madhab's position, not a
+personal preference.
+
+## How to rebuild the airports list
+
+`data/airports.json` is generated from [OurAirports](https://ourairports.com/data/) (public
+domain):
+
+```bash
+curl -L -o /tmp/airports.csv https://davidmegginson.github.io/ourairports-data/airports.csv
+npm run airports -- /tmp/airports.csv
+```
+
+The script keeps large and medium airports with an IATA code and gives each one the time
+zone of the nearest city in the same country from `data/cities.json` (OurAirports has no
+time zone column), so rebuild the cities first if you changed them. Keep the file under
+~500 KB; `npm test` checks its validity and size. Don't hand-edit `data/airports.json`.
 
 ## How to add a language
 
@@ -121,7 +162,7 @@ that script. To include more places, adjust the population threshold or the coun
 We use [Conventional Commits](https://www.conventionalcommits.org/):
 `feat(scope): ...`, `fix(scope): ...`, `docs: ...`, `test: ...`, `chore: ...`,
 `refactor: ...`. Scopes we use: settings, prayer, location, tracker, qibla, notify, focus,
-wake, guide, pwa, i18n.
+wake, guide, pwa, i18n, travel, tracker, flight, time.
 
 ## Pull request checklist
 

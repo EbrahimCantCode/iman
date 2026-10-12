@@ -53,4 +53,5 @@ export const STORAGE_KEYS = Object.freeze({
   settings: 'iman.settings',
   tracker: 'iman.tracker',
   state: 'iman.state',
+  travel: 'iman.travel',
 });

@@ -9,7 +9,7 @@
 //   available, tap to refresh").
 // - After install, the app makes no network requests except to its own origin.
 
-const CACHE_VERSION = '0.1.0';
+const CACHE_VERSION = '0.2.0';
 const SHELL_CACHE = `iman-shell-${CACHE_VERSION}`;
 // Bump when lib/tfjs or lib/coco-ssd change (see scripts/vendor.mjs).
 const MODEL_CACHE = 'iman-model-tfjs-4.22.0-cocossd-2.2.3';
@@ -21,6 +21,7 @@ const SHELL = [
   'wake.html',
   'manifest.webmanifest',
   'css/style.css',
+  'js/airports.js',
   'js/app.js',
   'js/audio.js',
   'js/boot.js',
@@ -29,6 +30,8 @@ const SHELL = [
   'js/config/defaults.js',
   'js/config/methods.js',
   'js/config/schema.js',
+  'js/config/travel-rules.js',
+  'js/flight.js',
   'js/focus.js',
   'js/i18n/ar.js',
   'js/i18n/en.js',
@@ -47,8 +50,10 @@ const SHELL = [
   'js/storage.js',
   'js/time.js',
   'js/tracker.js',
+  'js/travel.js',
   'js/ui.js',
   'js/version.js',
+  'js/views/flight.js',
   'js/views/guide.js',
   'js/views/location-picker.js',
   'js/views/onboarding.js',
@@ -57,12 +62,17 @@ const SHELL = [
   'js/views/settings.js',
   'js/views/today.js',
   'js/views/tracker.js',
+  'js/views/trip-planner.js',
+  'js/views/travel-today.js',
+  'js/views/travel-ui.js',
+  'js/views/travel.js',
   'js/views/wake-widget.js',
   'js/views/widgets.js',
   'js/wake-logic.js',
   'js/wake-params.js',
   'js/wake.js',
   'lib/adhan/adhan.esm.min.js',
+  'data/airports.json',
   'data/cities.json',
   'assets/audio/sounds.json',
   'assets/icons/apple-touch-icon.png',

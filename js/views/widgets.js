@@ -8,6 +8,7 @@ import { suggestMethod, resolveMethod } from '../config/methods.js';
 import { STORAGE_KEYS } from '../config/constants.js';
 import { removeKey } from '../storage.js';
 import { now, isDebugTime } from '../clock.js';
+import { toZonedInput, toZonedIso, zonedTimeToDate, deviceTimeZone } from '../time.js';
 
 export function createWidgets(ctx) {
   // "Suggested for your location (Kuwait)" in the method menu.
@@ -257,16 +258,21 @@ export function createWidgets(ctx) {
     const render = () => {
       clear(box);
       if (!ctx.values()['advanced.devMode']) return;
+      // Wall-clock time at the prayer location, not on the device.
+      const tz = ctx.location()?.tz || deviceTimeZone();
       const input = h('input', {
         type: 'datetime-local',
         step: 1,
         class: 'input',
         id: 'debug-time',
-        value: toLocalInput(now()),
+        value: toZonedInput(now(), tz),
       });
       const go = (value) => {
         const url = new URL(location.href);
-        if (value) url.searchParams.set('debugTime', value);
+        const when = value
+          ? zonedTimeToDate(value.length === 16 ? `${value}:00` : value, tz)
+          : null;
+        if (when) url.searchParams.set('debugTime', toZonedIso(when, tz));
         else url.searchParams.delete('debugTime');
         url.hash = '#settings/advanced';
         location.assign(url.toString());
@@ -309,9 +315,4 @@ export function createWidgets(ctx) {
 
 function stamp() {
   return new Date().toISOString().slice(0, 10);
-}
-
-function toLocalInput(d) {
-  const pad = (n) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }

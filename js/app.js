@@ -6,10 +6,8 @@ import { createSettingsStore } from './settings.js';
 import { createTracker } from './tracker.js';
 import { createState } from './state.js';
 import {
-  setLanguage,
-  resolveLanguage,
+  applyDocumentLanguage,
   t,
-  dir,
   currentLanguage,
   fmtNum,
   fmtTime,
@@ -33,6 +31,12 @@ import { createFocusLock, focusWidget } from './focus.js';
 import { wakeWidget, todayLinks } from './views/wake-widget.js';
 import { createGuideView } from './views/guide.js';
 import { registerServiceWorker, installCard, onInstallChange } from './pwa.js';
+import { createTravelStore } from './travel.js';
+import { createTravelController } from './views/travel-ui.js';
+import { createTravelView, travelSettingsWidget } from './views/travel.js';
+import { installTravelToday } from './views/travel-today.js';
+import { installTripPlanner } from './views/trip-planner.js';
+import { installFlight } from './views/flight.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -44,6 +48,7 @@ const storage = getStorage();
 const settings = createSettingsStore({ storage });
 const state = createState({ storage });
 const tracker = createTracker({ storage });
+const travelStore = createTravelStore({ storage });
 
 let values = settings.all();
 let revision = 0;
@@ -51,11 +56,19 @@ let scheduleCache = { key: '', value: null };
 const tickers = new Set();
 
 /** Feature hooks filled in by feature modules (tracker, notifications, ...). */
-const hooks = { todayExtras: [], sectionWidgets: {}, tickers: [] };
+const hooks = {
+  todayTop: [],
+  afterList: [],
+  todayExtras: [],
+  sectionWidgets: {},
+  travelSections: [],
+  travelSubviews: {},
+};
 
 const ctx = {
   settings,
   tracker,
+  travelStore,
   state,
   storage,
   hooks,
@@ -122,6 +135,18 @@ hooks.todayExtras.push((el) => {
   if (card) el.append(card);
 });
 
+// Travel mode
+ctx.travel = createTravelController(ctx);
+hooks.todayTop.push((el) => ctx.travel.todayCard(el));
+installTravelToday(ctx);
+installTripPlanner(ctx);
+installFlight(ctx);
+hooks.sectionWidgets.travel = () => travelSettingsWidget(ctx);
+travelStore.subscribe(() => {
+  ctx.refreshToday();
+  renderBanner();
+});
+
 // Wake check
 hooks.sectionWidgets.wake = () => wakeWidget(ctx);
 hooks.todayExtras.push((el) => todayLinks(ctx, el));
@@ -162,13 +187,10 @@ function applyAppearance() {
 }
 
 async function applyLanguage() {
-  const code = resolveLanguage(values['appearance.language']);
-  await setLanguage(code, {
+  await applyDocumentLanguage(document, values['appearance.language'], {
     numerals: values['appearance.numerals'],
     timeFormat: values['prayer.timeFormat'],
   });
-  document.documentElement.lang = code;
-  document.documentElement.dir = dir();
   const skip = document.getElementById('skip-link');
   if (skip) skip.textContent = t('common.skipToContent');
   document.getElementById('tabbar')?.setAttribute('aria-label', t('nav.main'));
@@ -183,6 +205,13 @@ const viewSlot = h('div', { id: 'view' });
 let active = null;
 const dirty = new Set();
 ctx.markDirty = (name) => dirty.add(name);
+/** Re-render the Today screen now if visible, otherwise when it is next shown. */
+ctx.refreshToday = () => {
+  if (active === 'today') {
+    ctx.views.today.render();
+    ctx.views.today.update?.(now());
+  } else dirty.add('today');
+};
 
 function renderTabbar() {
   clear(tabbar);
@@ -199,11 +228,11 @@ function renderTabbar() {
 }
 
 function parseRoute() {
-  const [name = '', sub = ''] = location.hash.replace(/^#/, '').split('/');
-  return { name, sub };
+  const [name = '', sub = '', ...rest] = location.hash.replace(/^#/, '').split('/');
+  return { name, sub, rest };
 }
 
-function show(name, sub) {
+function show(name, sub, rest = []) {
   const view = ctx.views[name];
   if (!view) return;
   const switching = active !== name;
@@ -218,15 +247,15 @@ function show(name, sub) {
     view.rendered = true;
     dirty.delete(name);
   }
-  view.onShow?.(sub);
+  view.onShow?.(sub, rest);
   view.update?.(now());
   document.title = `${view.title()} · ${t('app.name')}`;
   renderTabbar();
 }
 
 function onRoute() {
-  const { name, sub } = parseRoute();
-  if (ctx.views[name]) show(name, sub);
+  const { name, sub, rest } = parseRoute();
+  if (ctx.views[name]) show(name, sub, rest);
   else if (!active) show(values['appearance.startScreen'], '');
 }
 
@@ -242,8 +271,12 @@ function rerenderAll() {
   renderBanner();
 }
 
+let bannerDay = '';
 function renderBanner() {
   clear(bannerSlot);
+  bannerDay = ymd(now(), ctx.location()?.tz);
+  const badge = ctx.travel?.badge();
+  if (badge) bannerSlot.append(badge);
   if (isDebugTime()) {
     const loc = ctx.location();
     const n = now();
@@ -274,6 +307,7 @@ settings.subscribe(async (keys) => {
     ctx.bus.dispatchEvent(new Event('language'));
     return;
   }
+  if (keys.some((k) => k.startsWith('travel.') || k.startsWith('location.'))) renderBanner();
   for (const [name, view] of Object.entries(ctx.views)) {
     if (name === active) {
       if (!view.keepOnChange) {
@@ -291,6 +325,10 @@ let tickTimer;
 function tick() {
   const n = now();
   try {
+    if (ymd(n, ctx.location()?.tz) !== bannerDay) {
+      renderBanner();
+      ctx.travel.markTravelDays();
+    }
     ctx.views[active]?.update?.(n);
     for (const fn of tickers) fn(n);
   } catch (err) {
@@ -323,6 +361,7 @@ async function boot() {
   ctx.views.qibla = createQiblaView(ctx);
   ctx.views.tracker = createTrackerView(ctx);
   ctx.views.guide = createGuideView(ctx);
+  ctx.views.travel = createTravelView(ctx);
 
   document.getElementById('skip-link')?.addEventListener('click', (e) => {
     e.preventDefault();
@@ -337,6 +376,8 @@ async function boot() {
 
   if (shouldOnboard(ctx)) runOnboarding(ctx);
   else refreshGpsLocation();
+  ctx.travel.observe();
+  ctx.travel.refreshPosition();
 
   registerServiceWorker();
   onInstallChange(() => {

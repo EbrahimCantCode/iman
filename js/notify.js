@@ -62,6 +62,14 @@ export function renderAlert(alert, ctx) {
       };
     case 'fill':
       return { title: t('notify.fill.title'), body: t('notify.fill.body') };
+    case 'combined':
+      return {
+        title: t('notify.combined.title', { pair: `${prayer} + ${t(`prayer.${alert.partner}`)}` }),
+        body: t(`notify.combined.body.${alert.combineType}`, { time }),
+      };
+    case 'stay':
+    case 'flight':
+      return { title: alert.title, body: alert.body };
     default:
       return { title: t('app.name'), body: '' };
   }
@@ -113,13 +121,23 @@ export function createNotifier(ctx) {
     const schedule = ctx.schedule();
     const values = ctx.values();
     if (!schedule) return [];
-    if (cacheKey?.schedule !== schedule || cacheKey?.values !== values) {
-      cacheKey = { schedule, values };
-      alerts = buildAlerts({
-        days: [schedule.yesterday, schedule.today, schedule.tomorrow],
-        values,
-        tz: schedule.tz,
-      });
+    const extra = ctx.hooks.alertsVersion?.() ?? 0;
+    if (
+      cacheKey?.schedule !== schedule ||
+      cacheKey?.values !== values ||
+      cacheKey?.extra !== extra
+    ) {
+      cacheKey = { schedule, values, extra };
+      alerts = [
+        ...buildAlerts({
+          days: [schedule.yesterday, schedule.today, schedule.tomorrow],
+          values,
+          tz: schedule.tz,
+          combine: ctx.hooks.combineAlerts?.() ?? null,
+        }),
+        // Travel extras: stay-limit reminder, flight prayer reminders.
+        ...(values['reminders.enabled'] ? (ctx.hooks.extraAlerts?.(schedule) ?? []) : []),
+      ].sort((a, b) => a.time - b.time);
       syncBackground(alerts).catch(() => {});
     }
     return alerts;
