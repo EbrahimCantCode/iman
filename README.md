@@ -107,6 +107,10 @@ keep it, first export a backup: **Settings → Data and privacy → Export backu
 - **Fajr wake check**: after your alarm, the wake check keeps ringing until you photograph
   a sink. Detection runs on your phone (TensorFlow.js + COCO-SSD); a maths challenge
   takes over after several failed photos or if the camera is unavailable.
+- **Travel mode** (وضع السفر): know when you count as a traveller, see shortened (qasr) and
+  combined (jamʿ) prayers on the Today screen, plan trips with prayer times at your
+  destination in its own time zone, and see when each prayer begins during a flight. See
+  [Travel mode](#travel-mode).
 - **English and Arabic** with full right-to-left layout and Arabic-Indic numerals.
 - **Dark and light themes**, accent colours and text sizes.
 - **Everything is a setting**: every number and choice has a sensible default and can be
@@ -114,7 +118,10 @@ keep it, first export a backup: **Settings → Data and privacy → Export backu
 
 ## Screenshots
 
-_Screenshots coming soon._ (Today, Qibla, Tracker, Settings, focus lock, wake check.)
+_Screenshots coming soon._ (Today, Qibla, Tracker, Settings, focus lock, wake check, travel
+mode, trip planner, flight prayer times.)
+
+<!-- Placeholders: docs/images/travel-today.png, docs/images/trip-planner.png, docs/images/flight-times.png -->
 
 ## Privacy
 
@@ -125,6 +132,69 @@ After it is installed, Iman makes **no network requests** except to load its own
 from the site it was installed from. City search, the Qibla, prayer calculation and the
 wake check's object detection all run on your device. Wake check photos are processed in
 memory and are never saved or uploaded.
+
+## Travel mode
+
+Travel mode helps you pray correctly and on time while travelling. Open it from the
+**✈ Travel mode** switch on the Today screen, **Settings → Travel**, or a saved trip.
+
+> **Rulings differ between scholars.** Iman follows the common position of the madhab you
+> choose (Hanafi, Maliki, Shafiʿi, Hanbali, or Custom numbers from your own scholar). It is
+> not a fatwa: ask a scholar you trust if unsure. Every ruling lives in one reviewable file,
+> [`js/config/travel-rules.js`](js/config/travel-rules.js), with its sources.
+
+### What it does
+
+- **Manual switch, always.** Turn travel mode on or off with one tap. It works with no GPS,
+  no location and no home set. When you switch it on you can add a destination and a
+  planned length of stay; both are optional.
+- **Suggestions, never surprises.** With auto-detect on (the default), when you are farther
+  from your **home location** than your madhab's travel distance, Iman shows "Looks like
+  you're travelling (X km from home). Turn on travel mode?" It never switches by itself.
+  Your choice wins: after you turn it off, it won't suggest it again until you've moved
+  (50 km by default); if you turn it on near home (about to leave), it stays on. When you're
+  back near home after being away, it offers to turn travel mode off.
+- **Length of stay.** "Day N of your trip", and as you approach your madhab's limit:
+  "You've been here X days. If you plan to stay more than Y days, you're no longer a
+  traveller (by your madhab)." Iman asks for your planned stay rather than assuming it.
+- **Shortened and combined prayers on Today.** "2 rakʿahs (shortened)" under Dhuhr, Asr and
+  Isha (Fajr and Maghrib are never shortened). Where your madhab allows combining, the
+  combined windows ("Dhuhr + Asr: can be prayed together between 11:24 and 17:13") with a
+  choice of early (jamʿ taqdim) or delayed (jamʿ taʾkhir). The next prayer and countdown
+  follow your choice, and you can get one reminder per combined pair. For the Hanafi
+  madhab, Iman shows the clearly labelled option of praying Dhuhr at the end of its time and
+  Asr at the start of its time instead.
+- **Tracker.** Prayers can record that they were shortened and/or combined (early or
+  delayed); they still count as on time for streaks. Travel days get a ✈ in the heatmap.
+- **Trip planner.** Pick a destination and dates to see the prayer times there for every
+  day, **in the destination's time zone**, with your home time alongside, the suggested
+  calculation method for that country (accept it or keep yours), and the Qibla. On the
+  trip's first day Iman offers to start travel mode.
+- **Flight prayer times.** Enter the departure and arrival airports (search by IATA code or
+  city), the local departure time and the duration or local arrival time. Iman lists each
+  prayer that begins during the flight, for example _"Maghrib ≈ 18:42 (BAH time) / 16:42
+  (LHR time), over Romania, about 4 h 12 min after take-off"_, with the Qibla bearing at
+  that point. You can turn on reminders for the flight.
+
+Everything is calculated on your device and works offline, including the bundled airports
+list.
+
+### How flight prayer times are estimated (and their limits)
+
+- The plane is assumed to fly the **great-circle route** (the shortest path over the Earth)
+  at a **steady pace** from take-off to landing. Taxiing, climbing, air routes and delays are
+  ignored, so real positions can differ.
+- Iman steps through the flight minute by minute, computes the prayer times at the
+  estimated position, and finds the moment the time on board passes each prayer's start.
+  It handles flights across midnight and the date line, flights where the sun barely sets
+  (flying west at sunset) or a prayer begins just after landing, and very short flights with
+  no prayer.
+- **Altitude is not taken into account:** adhan-js has no altitude input, so at cruising
+  altitude the sun sets a few minutes later and rises a few minutes earlier than shown.
+- Near the poles Iman uses your **high-latitude rule**; times there are rough.
+- The Qibla bearing is from **true north**. To use it you need the aircraft's heading,
+  shown on the in-flight map.
+- Flight reminders, like all reminders, only appear while Iman is open.
 
 ## iPhone setup guide
 
@@ -270,6 +340,9 @@ Without an adhan file, a short synthesised chime plays instead.
   [docs/wake-check-detector.md](docs/wake-check-detector.md) for test results.
 - **Calculated times** can differ by a few minutes from your local timetable. Use the
   per-prayer minute adjustments.
+- **Travel rulings** are the commonly cited positions per madhab, pending review by a
+  qualified scholar; use Custom if yours differ. **Flight times** are estimates (great-circle
+  route, steady pace, no altitude).
 
 ## Running it yourself (developers)
 
@@ -303,9 +376,11 @@ On `localhost` the service worker prefers the network, so your edits show up on 
 | `npm run vendor`             | Copy adhan / TensorFlow.js / COCO-SSD from `node_modules` into `lib/` (`-- --model` re-downloads the model) |
 | `npm run cities -- <folder>` | Rebuild `data/cities.json` from GeoNames dumps                                                              |
 | `npm run icons`              | Redraw the app icons                                                                                        |
+| `npm run airports -- <csv>`  | Rebuild `data/airports.json` from OurAirports' `airports.csv`                                               |
 
-Testing helpers: add `?debugTime=2026-10-12T11:23:50` to the URL to fake the current time
-(reminders and the focus lock fire as if it were that time), turn on **Settings → Advanced →
+Testing helpers: add `?debugTime=2026-10-12T11:23:50+03:00` to the URL to fake the current
+time (reminders, the focus lock, travel mode and flight reminders behave as if it were that
+time), turn on **Settings → Advanced →
 Developer mode** for a debug time picker and detection scores, and open
 `tests/detector.html` to try the sink detector on still photos.
 
@@ -318,6 +393,9 @@ Not built yet:
 - More languages.
 - Quran verse of the day.
 - Mosque finder (would need network access, so opt-in only).
+- Live flight tracking or real flight routes for in-flight prayer times (needs network
+  access).
+- Automatic Qibla on the plane using the aircraft's heading.
 
 ## Contributing
 
@@ -335,5 +413,6 @@ Iman is released under the [MIT License](LICENSE). It includes:
   [COCO-SSD](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd) by Google
   (Apache-2.0): on-device object detection.
 - City data © [GeoNames](https://www.geonames.org/) (CC BY 4.0).
+- Airport data from [OurAirports](https://ourairports.com/data/) (public domain).
 
 Details and license texts: [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) and `lib/*/LICENSE`.

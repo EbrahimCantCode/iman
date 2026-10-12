@@ -9,7 +9,7 @@
 //   available, tap to refresh").
 // - After install, the app makes no network requests except to its own origin.
 
-const CACHE_VERSION = '0.1.0';
+const CACHE_VERSION = '0.2.0';
 const SHELL_CACHE = `iman-shell-${CACHE_VERSION}`;
 // Bump when lib/tfjs or lib/coco-ssd change (see scripts/vendor.mjs).
 const MODEL_CACHE = 'iman-model-tfjs-4.22.0-cocossd-2.2.3';

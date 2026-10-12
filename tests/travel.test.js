@@ -454,3 +454,39 @@ describe('trip planner times', () => {
     );
   });
 });
+
+describe('?debugTime= with travel mode and flights', () => {
+  test('the faked clock drives trip days, combining and in-flight events', async () => {
+    const { initClock, now, setClockOffset } = await import('../js/clock.js');
+    const { ymd } = await import('../js/time.js');
+    const { flightPrayers } = await import('../js/flight.js');
+    try {
+      initClock('?debugTime=2026-10-16T12:00:00%2B03:00');
+      const today = ymd(now(), 'Asia/Bahrain');
+      assert.equal(today, '2026-10-16');
+      const s = stayStatus({
+        startDate: '2026-10-12',
+        today,
+        plannedDays: null,
+        rules: travelRules(base),
+        values: base,
+      });
+      assert.equal(s.dayNumber, 5);
+      assert.equal(s.approaching, true);
+      const schedule = getSchedule(now(), MANAMA, base);
+      assert.deepEqual(nextPrayerTravel(now(), schedule, 'early').prayers, ['maghrib', 'isha']);
+      // A flight leaving "now" (debug time) finds Asr soon after take-off.
+      const r = flightPrayers({
+        from: { lat: 26.267, lon: 50.638 },
+        to: { lat: 51.471, lon: -0.46 },
+        departure: now(),
+        arrival: new Date(now().getTime() + 7 * 3_600_000),
+        values: base,
+        methodCountry: 'BH',
+      });
+      assert.equal(r.events[0].prayer, 'asr');
+    } finally {
+      setClockOffset(0);
+    }
+  });
+});

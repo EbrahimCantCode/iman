@@ -1,6 +1,6 @@
 {
   "name": "iman",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Iman (إيمان): a free, open-source, offline-first Muslim prayer app (PWA).",
   "private": true,
   "type": "module",
