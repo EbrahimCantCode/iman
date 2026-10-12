@@ -277,6 +277,50 @@ function cleanCurrent(c) {
   };
 }
 
+const PRAYER_NAMES = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+const isIsoTime = (s) => typeof s === 'string' && s.length < 40 && !Number.isNaN(Date.parse(s));
+
+function cleanAirport(a) {
+  const p = cleanPlace(a);
+  if (!p || !/^[A-Z]{3}$/.test(a.iata ?? '') || !p.tz) return null;
+  const str = (v, max) => (typeof v === 'string' ? v.slice(0, max) : '');
+  return {
+    iata: a.iata,
+    name: str(a.name, 120),
+    city: str(a.city, 80),
+    cc: /^[A-Z]{2}$/.test(a.cc ?? '') ? a.cc : '',
+    lat: p.lat,
+    lon: p.lon,
+    tz: p.tz,
+  };
+}
+
+function cleanFlight(f) {
+  if (!isPlainObject(f) || typeof f.id !== 'string') return null;
+  const from = cleanAirport(f.from);
+  const to = cleanAirport(f.to);
+  if (!from || !to || !isIsoTime(f.departure) || !isIsoTime(f.arrival)) return null;
+  const events = (Array.isArray(f.events) ? f.events : [])
+    .filter(
+      (e) =>
+        isPlainObject(e) &&
+        PRAYER_NAMES.includes(e.prayer) &&
+        isIsoTime(e.time) &&
+        validCoords(e.lat, e.lon),
+    )
+    .slice(0, 20)
+    .map((e) => ({ prayer: e.prayer, time: e.time, lat: e.lat, lon: e.lon }));
+  return {
+    id: f.id.slice(0, 40),
+    from,
+    to,
+    departure: f.departure,
+    arrival: f.arrival,
+    remind: f.remind === true,
+    events,
+  };
+}
+
 /** Validate stored travel data (never trusted). */
 export function validateTravelData(raw) {
   const d = isPlainObject(raw) ? raw : {};
@@ -286,7 +330,10 @@ export function validateTravelData(raw) {
     version: 1,
     current: cleanCurrent(d.current),
     trips: (Array.isArray(d.trips) ? d.trips : []).map(cleanTrip).filter(Boolean).slice(0, 100),
-    flights: (Array.isArray(d.flights) ? d.flights : []).filter(isPlainObject).slice(0, 20),
+    flights: (Array.isArray(d.flights) ? d.flights : [])
+      .map(cleanFlight)
+      .filter(Boolean)
+      .slice(0, 20),
     dismissedAt: point(d.dismissedAt),
     endDismissedAt: point(d.endDismissedAt),
     offeredTrips: (Array.isArray(d.offeredTrips) ? d.offeredTrips : [])

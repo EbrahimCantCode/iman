@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "vendor": "node scripts/vendor.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "cities": "node scripts/build-cities.mjs"
+    "cities": "node scripts/build-cities.mjs",
+    "airports": "node scripts/build-airports.mjs"
   },
   "dependencies": {
     "@tensorflow-models/coco-ssd": "2.2.3",

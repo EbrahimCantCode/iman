@@ -463,6 +463,66 @@ export default {
     'trip.offline': 'Calculated on your device; no internet needed.',
     'trip.offer': 'Your trip to {place} starts today. Start travel mode?',
 
+    // Flight prayer times
+    'flight.title': 'Flight prayer times',
+    'flight.entry':
+      'See when each prayer begins during a flight, where the plane will be, and the Qibla there. Works offline.',
+    'flight.open': 'Calculate for a flight',
+    'flight.intro': 'Enter your flight. Times are local at the departure and arrival airports.',
+    'flight.airportSearch': 'IATA code or city, e.g. BAH',
+    'flight.airportsError': 'The airport list could not be loaded.',
+    'flight.from': 'From',
+    'flight.to': 'To',
+    'flight.depDate': 'Departure date',
+    'flight.depTime': 'Departure time (local)',
+    'flight.modeLabel': 'Flight length',
+    'flight.mode.duration': 'Duration',
+    'flight.mode.arrival': 'Arrival time',
+    'flight.hours': 'Hours',
+    'flight.minutes': 'Minutes',
+    'flight.arrDate': 'Arrival date',
+    'flight.arrTime': 'Arrival time (local)',
+    'flight.calculate': 'Calculate prayer times',
+    'flight.needAirports': 'Choose both airports first.',
+    'flight.badTimes':
+      'Check the times: the arrival must be after the departure, and flights can be up to 22 hours.',
+    'flight.summary': '{date} · {distance} · {duration}',
+    'flight.atDeparture': 'At take-off it is {prayer} time.',
+    'flight.none': 'No prayer time begins during this flight.',
+    'flight.fajrEnds': 'Sunrise (end of Fajr time)',
+    'flight.timeOne': '{time}',
+    'flight.timeBoth': '{dep} ({depCode} time) / {arr} ({arrCode} time)',
+    'flight.where': '{where}, about {after} after take-off',
+    'flight.over': 'over {country}',
+    'flight.overSea': 'over the sea or a remote area',
+    'flight.qibla': 'Qibla {deg}° from true North',
+    'flight.nearMiss':
+      '{prayer} comes within about {minutes} min of the flight but doesn’t begin during it (for example just after landing, or the sun stays near the horizon).',
+    'flight.guidance': 'Praying on the plane',
+    'flight.guideSeated': 'If you can’t stand on the plane, pray seated.',
+    'flight.guideCombine':
+      'Your madhab allows combining while travelling: you may pray a pair together before or after the flight.',
+    'flight.guideQibla':
+      'The Qibla bearing is from true North. To use it you need the aircraft’s heading (shown on the in-flight map).',
+    'flight.howTitle': 'How these times are estimated',
+    'flight.howRoute':
+      'The plane is assumed to fly the great-circle route at a steady pace from take-off to landing. Taxiing, climbing and real air routes are ignored.',
+    'flight.howAltitude':
+      'Times are calculated at ground level: adhan-js has no altitude input, so at cruising altitude the sun sets a few minutes later and rises a few minutes earlier than shown.',
+    'flight.howPolar':
+      'Near the poles, Iman uses your high-latitude rule, and times there are rough.',
+    'flight.howCompare': 'Check the in-flight map and the time on board when it’s close.',
+    'flight.remindOn': 'Remind me during this flight',
+    'flight.remindOff': 'Stop reminders for this flight',
+    'flight.remindSaved': 'Flight reminders on',
+    'flight.remindRemoved': 'Flight reminders off',
+    'flight.remindNote':
+      'Like all reminders, these only appear if Iman is open (for example in flight mode with the app on screen) and notifications are on.',
+    'flight.saved': 'Saved flights',
+    'flight.delete': 'Delete flight {route}',
+    'flight.alertTitle': '{prayer} has begun (in flight)',
+    'flight.alertBody': 'Estimated for your flight {route}.',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

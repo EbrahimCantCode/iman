@@ -203,6 +203,8 @@ export function createTravelView(ctx) {
   }
 
   ctx.travelStore.subscribe(() => {
+    // Sub-pages with their own form state (the flight page) opt out.
+    if (ctx.hooks.travelSubviews[sub]?.keepOnStoreChange) return;
     if (el.isConnected) render();
     else ctx.markDirty?.('travel');
   });

@@ -1960,3 +1960,45 @@ html:has(.focus-overlay[open]) {
 .trip-table tbody th {
   font-weight: 600;
 }
+
+/* ------------------------------------------------------------ flights */
+
+.flight-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.airport-chosen {
+  min-height: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.flight-timeline {
+  list-style: none;
+  margin: 0.75rem 0;
+  padding: 0;
+  border-inline-start: 3px solid var(--accent);
+}
+.flight-event {
+  position: relative;
+  padding: 0.35rem 0 0.75rem;
+  padding-inline-start: 1rem;
+}
+.flight-event::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -0.45rem;
+  top: 0.6rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.flight-event.is-minor::before {
+  background: var(--surface-3);
+}
+.flight-qibla {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

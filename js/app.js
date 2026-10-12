@@ -38,6 +38,7 @@ import { createTravelController } from './views/travel-ui.js';
 import { createTravelView, travelSettingsWidget } from './views/travel.js';
 import { installTravelToday } from './views/travel-today.js';
 import { installTripPlanner } from './views/trip-planner.js';
+import { installFlight } from './views/flight.js';
 import { createWidgets } from './views/widgets.js';
 import { runOnboarding, shouldOnboard } from './views/onboarding.js';
 import { gpsPatch } from './views/location-picker.js';
@@ -141,6 +142,7 @@ ctx.travel = createTravelController(ctx);
 hooks.todayTop.push((el) => ctx.travel.todayCard(el));
 installTravelToday(ctx);
 installTripPlanner(ctx);
+installFlight(ctx);
 hooks.sectionWidgets.travel = () => travelSettingsWidget(ctx);
 travelStore.subscribe(() => {
   ctx.refreshToday();

@@ -25,6 +25,8 @@ licensed CC BY 4.0).
 | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
 | [GeoNames](https://www.geonames.org/) cities with population ≥ 15,000, plus places ≥ 5,000 in the GCC | Offline city search and "nearest city" for GPS and manual coordinates | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | `data/cities.json` (built by `scripts/build-cities.mjs`) |
 
+| [OurAirports](https://ourairports.com/data/) large and medium airports with IATA codes | Flight prayer times (airport search, positions, "over which country") | Public domain | `data/airports.json` (built by `scripts/build-airports.mjs`; time zones taken from the nearest GeoNames city in the same country) |
+
 Attribution: city data © GeoNames (www.geonames.org), licensed under CC BY 4.0. Arabic
 city names are taken from GeoNames alternate names and lightly normalised.
 
