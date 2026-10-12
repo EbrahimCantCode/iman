@@ -11,6 +11,7 @@ export const DEFAULTS = Object.freeze({
   'location.lat': null,
   'location.lon': null,
   'location.name': '',
+  'location.nameAr': '',
   'location.country': '',
   'location.tz': '',
 

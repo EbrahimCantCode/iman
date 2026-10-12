@@ -146,6 +146,14 @@ const ENTRIES = [
     personal: true,
   },
   {
+    key: 'location.nameAr',
+    type: 'text',
+    section: 'location',
+    maxLength: 120,
+    hidden: true,
+    personal: true,
+  },
+  {
     key: 'location.country',
     type: 'text',
     section: 'location',
