@@ -38,6 +38,29 @@ export const DEFAULTS = Object.freeze({
   'prayer.timeFormat': 'device',
   'prayer.hijriOffset': 0,
 
+  // Travel
+  'travel.enabled': false,
+  'travel.autoDetect': true,
+  'travel.resuggestKm': 50,
+  'travel.madhab': 'auto', // follows the Asr setting: Hanafi Asr -> Hanafi, otherwise Shafi'i
+  'travel.customDistanceKm': 83,
+  'travel.customMaxStayDays': 4,
+  'travel.customShortening': 'optional',
+  'travel.customCombining': 'both',
+  'travel.units': 'km',
+  'travel.showCombined': true,
+  'travel.combineMode': 'off',
+  'travel.combinedReminder': false,
+  'travel.showHomeTime': true,
+  'travel.stayReminder': true,
+  'travel.stayReminderDays': 1,
+  'home.lat': null,
+  'home.lon': null,
+  'home.name': '',
+  'home.nameAr': '',
+  'home.country': '',
+  'home.tz': '',
+
   // Reminders and adhan
   'reminders.enabled': false, // permission is only requested when switched on
   'reminders.fajr.atTime': true,
