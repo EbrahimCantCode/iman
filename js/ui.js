@@ -259,22 +259,28 @@ export async function copyText(text) {
 export function longPress(el, ms, onDone, onProgress = () => {}) {
   let start = 0;
   let raf = 0;
-  const tick = (ts) => {
-    const p = Math.min(1, (ts - start) / ms);
-    onProgress(p);
-    if (p >= 1) {
-      stop(false);
-      onDone();
-    } else raf = requestAnimationFrame(tick);
+  let timer = 0;
+  // Completion uses a timer (rAF pauses when the page isn't painting);
+  // animation frames only drive the progress indicator.
+  const tick = () => {
+    onProgress(Math.min(1, (performance.now() - start) / ms));
+    raf = requestAnimationFrame(tick);
   };
   const begin = (e) => {
-    if (raf) return;
+    if (timer) return;
     e.preventDefault();
     start = performance.now();
+    timer = setTimeout(() => {
+      stop(false);
+      onProgress(1);
+      onDone();
+    }, ms);
     raf = requestAnimationFrame(tick);
   };
   const stop = (reset = true) => {
+    clearTimeout(timer);
     cancelAnimationFrame(raf);
+    timer = 0;
     raf = 0;
     if (reset) onProgress(0);
   };

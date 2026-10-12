@@ -191,6 +191,23 @@ export default {
     'audio.tooLarge': 'That file is too large (15 MB max).',
     'audio.notAudio': 'That doesn’t look like an audio file.',
 
+    // Focus lock
+    'focus.kicker': 'Prayer time',
+    'focus.testLabel': 'Test · nothing is recorded',
+    'focus.title': 'Time for {prayer}',
+    'focus.defaultMessage':
+      'Put the phone down, make wudu and pray. Everything here will still be waiting when you return.',
+    'focus.prayed': 'I’ve prayed ✓',
+    'focus.remaining': '{time} left',
+    'focus.hold': 'Hold {s} s to exit',
+    'focus.holdAria': 'Emergency exit: press and hold for {s} seconds',
+    'focus.ended': 'Focus time is over',
+    'focus.marked': '{prayer} marked as prayed',
+    'focus.test': 'Test focus lock',
+    'focus.explain':
+      'A web app can’t block other apps. This shows a calm full-screen pause inside Iman at prayer time while it is open. For real app blocking, use your phone’s Focus mode; the setup guide shows how.',
+    'focus.guideLink': 'Setup guide',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

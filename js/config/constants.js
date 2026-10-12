@@ -7,6 +7,20 @@ export const PRAYERS = Object.freeze(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']
 /** Rows on the Today screen, in order (Sunrise is a time, not a prayer). */
 export const DAY_TIMES = Object.freeze(['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha']);
 
+/** Arabic names, shown next to English names (and used by the Arabic UI). */
+export const AR_NAMES = Object.freeze({
+  fajr: 'الفجر',
+  sunrise: 'الشروق',
+  dhuhr: 'الظهر',
+  asr: 'العصر',
+  maghrib: 'المغرب',
+  isha: 'العشاء',
+  imsak: 'الإمساك',
+  duha: 'الضحى',
+  tahajjud: 'التهجد',
+  jumuah: 'الجمعة',
+});
+
 /** Tracker statuses, in the order the check button cycles through them. */
 export const STATUSES = Object.freeze(['prayed', 'late', 'missed']);
 

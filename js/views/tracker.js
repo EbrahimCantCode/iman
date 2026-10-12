@@ -4,10 +4,9 @@
 import { h, clear, openDialog, nextId } from '../ui.js';
 import { icon } from '../icons.js';
 import { t, tn, fmtNum, fmtDate, currentLanguage } from '../i18n/index.js';
-import { PRAYERS, STATUSES, SUNNAH } from '../config/constants.js';
+import { PRAYERS, STATUSES, SUNNAH, AR_NAMES } from '../config/constants.js';
 import { computeStreaks, completion, lastDates, nextStatus, weekStartDate } from '../tracker.js';
 import { ymd, weekdayOf, addDays, parseYmd } from '../time.js';
-import { AR_NAMES } from './today.js';
 
 /** Noon UTC of a calendar day, for formatting dates without zone shifts. */
 const dateOf = (s) => {

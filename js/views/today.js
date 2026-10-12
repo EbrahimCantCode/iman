@@ -13,20 +13,7 @@ import {
 } from '../i18n/index.js';
 import { nextPrayer, currentPrayer, windowEnd } from '../prayer.js';
 import { formatCountdown, weekdayOf } from '../time.js';
-import { PRAYERS } from '../config/constants.js';
-
-export const AR_NAMES = Object.freeze({
-  fajr: 'الفجر',
-  sunrise: 'الشروق',
-  dhuhr: 'الظهر',
-  asr: 'العصر',
-  maghrib: 'المغرب',
-  isha: 'العشاء',
-  imsak: 'الإمساك',
-  duha: 'الضحى',
-  tahajjud: 'التهجد',
-  jumuah: 'الجمعة',
-});
+import { PRAYERS, AR_NAMES } from '../config/constants.js';
 
 /** Rows shown on the Today screen for the current settings. */
 export function todayRows(values) {
