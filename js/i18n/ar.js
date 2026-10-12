@@ -420,6 +420,16 @@ export default {
     'notify.combined.body.delayed': 'جمع تأخير · {time}',
     'notify.stay.title': 'مدة الإقامة',
 
+    // Tracker: travel
+    'tracker.travel': 'السفر',
+    'tracker.travelDay': 'يوم سفر',
+    'tracker.travelDays': 'أيام السفر (٣٠ يومًا)',
+    'tracker.shortened': 'قصر',
+    'tracker.combined.none': 'دون جمع',
+    'tracker.combined.early': 'جمع تقديم مع {prayer}',
+    'tracker.combined.delayed': 'جمع تأخير مع {prayer}',
+    'tracker.combinedLabel': 'كيف صُلّيت {prayer}',
+
     // Install & update
     'install.title': 'ثبّت إيمان',
     'install.body': 'ثبّت إيمان لاستخدامه دون اتصال ولتلقي تنبيهات الصلاة.',

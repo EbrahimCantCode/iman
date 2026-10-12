@@ -424,6 +424,16 @@ export default {
     'notify.combined.body.delayed': 'Jamʿ taʾkhir · {time}',
     'notify.stay.title': 'Length of stay',
 
+    // Tracker: travel
+    'tracker.travel': 'Travel',
+    'tracker.travelDay': 'Travel day',
+    'tracker.travelDays': 'Travel days (30 days)',
+    'tracker.shortened': 'Shortened',
+    'tracker.combined.none': 'Not combined',
+    'tracker.combined.early': 'Combined early with {prayer}',
+    'tracker.combined.delayed': 'Combined delayed with {prayer}',
+    'tracker.combinedLabel': 'How {prayer} was prayed',
+
     // Install & update
     'install.title': 'Install Iman',
     'install.body': 'Install Iman for offline use and prayer notifications.',

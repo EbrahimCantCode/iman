@@ -325,7 +325,10 @@ let tickTimer;
 function tick() {
   const n = now();
   try {
-    if (ymd(n, ctx.location()?.tz) !== bannerDay) renderBanner();
+    if (ymd(n, ctx.location()?.tz) !== bannerDay) {
+      renderBanner();
+      ctx.travel.markTravelDays();
+    }
     ctx.views[active]?.update?.(n);
     for (const fn of tickers) fn(n);
   } catch (err) {

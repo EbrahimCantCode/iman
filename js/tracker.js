@@ -1,13 +1,57 @@
 // Prayer tracker: one record per calendar day, streaks and completion stats.
 //
-// Stored as { version: 1, days: { "2026-10-12": { fajr: "prayed", dhuhr: "late",
-//   sunnah: { witr: true }, wake: "04:41" } } }. Unmarked prayers are absent.
+// Stored as { version: 2, days: { "2026-10-12": { fajr: "prayed", dhuhr: "late",
+//   sunnah: { witr: true }, wake: "04:41", travel: true,
+//   meta: { dhuhr: { shortened: true, combinedWith: "asr", combineType: "early" } } } } }
+// Unmarked prayers are absent. Statuses stay plain strings; the optional
+// travel flags live in "meta", so records without them are normal prayers.
 
 import { PRAYERS, STATUSES, SUNNAH, STORAGE_KEYS } from './config/constants.js';
+import { COMBINE_PAIRS } from './config/travel-rules.js';
 import { readJSON, writeJSON, isPlainObject } from './storage.js';
 import { addDays, isYmd, daysBetween } from './time.js';
 
-export const TRACKER_VERSION = 1;
+export const TRACKER_VERSION = 2;
+
+/**
+ * Tracker migrations, keyed by the version they upgrade FROM.
+ * 1 -> 2 added the optional "meta" and "travel" fields. Version 1 records
+ * are already valid version 2 records (missing flags = a normal prayer).
+ */
+export const TRACKER_MIGRATIONS = Object.freeze({
+  1: (days) => days,
+});
+
+/** Bring a stored tracker payload up to the current version. */
+export function migrateTracker(stored) {
+  if (!isPlainObject(stored)) return {};
+  let version = Number.isInteger(stored.version) ? stored.version : 1;
+  let days = isPlainObject(stored.days) ? stored.days : {};
+  while (version < TRACKER_VERSION) {
+    days = TRACKER_MIGRATIONS[version]?.(days) ?? days;
+    version += 1;
+  }
+  return days;
+}
+
+const PARTNER = Object.fromEntries(
+  COMBINE_PAIRS.flatMap(([a, b]) => [
+    [a, b],
+    [b, a],
+  ]),
+);
+
+/** Clean the travel flags of one prayer; null when there are none. */
+export function validateMeta(prayer, raw) {
+  if (!isPlainObject(raw)) return null;
+  const meta = {};
+  if (raw.shortened === true && ['dhuhr', 'asr', 'isha'].includes(prayer)) meta.shortened = true;
+  if (raw.combinedWith && raw.combinedWith === PARTNER[prayer]) {
+    meta.combinedWith = raw.combinedWith;
+    if (['early', 'delayed'].includes(raw.combineType)) meta.combineType = raw.combineType;
+  }
+  return Object.keys(meta).length ? meta : null;
+}
 export const MAX_TRACKER_IMPORT_BYTES = 5_000_000;
 const WAKE_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -22,6 +66,15 @@ export function validateDay(raw) {
     if (Object.keys(sunnah).length) day.sunnah = sunnah;
   }
   if (typeof raw.wake === 'string' && WAKE_RE.test(raw.wake)) day.wake = raw.wake;
+  if (raw.travel === true) day.travel = true;
+  if (isPlainObject(raw.meta)) {
+    const meta = {};
+    for (const p of PRAYERS) {
+      const m = day[p] ? validateMeta(p, raw.meta[p]) : null;
+      if (m) meta[p] = m;
+    }
+    if (Object.keys(meta).length) day.meta = meta;
+  }
   return Object.keys(day).length ? day : null;
 }
 
@@ -102,6 +155,11 @@ export function completion(days, dates, isDue = () => true) {
   return { done, total, ratio: total ? done / total : 0 };
 }
 
+/** Number of travel days among `dates`. */
+export function countTravelDays(days, dates) {
+  return dates.filter((d) => days[d]?.travel).length;
+}
+
 /** The last `n` dates ending at `today`, oldest first. */
 export function lastDates(today, n) {
   return Array.from({ length: n }, (_, i) => addDays(today, i - n + 1));
@@ -142,7 +200,7 @@ export function parseTrackerImport(input) {
 
 export function createTracker({ storage, key = STORAGE_KEYS.tracker }) {
   const stored = readJSON(storage, key, null);
-  let { days } = validateDays(isPlainObject(stored) ? stored.days : null);
+  let { days } = validateDays(migrateTracker(stored));
   const listeners = new Set();
 
   const save = () => writeJSON(storage, key, { version: TRACKER_VERSION, days });
@@ -158,7 +216,11 @@ export function createTracker({ storage, key = STORAGE_KEYS.tracker }) {
 
   function update(date, mutate) {
     if (!isYmd(date)) return;
-    const next = { ...(days[date] ?? {}), sunnah: { ...(days[date]?.sunnah ?? {}) } };
+    const next = {
+      ...(days[date] ?? {}),
+      sunnah: { ...(days[date]?.sunnah ?? {}) },
+      meta: { ...(days[date]?.meta ?? {}) },
+    };
     mutate(next);
     const clean = validateDay(next);
     const copy = { ...days };
@@ -172,10 +234,31 @@ export function createTracker({ storage, key = STORAGE_KEYS.tracker }) {
   return {
     getDay: (date) => days[date] ?? {},
     all: () => days,
-    setStatus(date, prayer, status) {
+    /**
+     * Set a prayer's status. `meta` (travel flags) is optional: undefined
+     * keeps the current flags, null clears them, an object replaces them.
+     * Clearing the status clears its flags too.
+     */
+    setStatus(date, prayer, status, meta) {
       update(date, (d) => {
         if (status) d[prayer] = status;
         else delete d[prayer];
+        if (!status || meta === null) delete d.meta[prayer];
+        else if (meta) d.meta[prayer] = meta;
+      });
+    },
+    setMeta(date, prayer, meta) {
+      update(date, (d) => {
+        if (meta) d.meta[prayer] = meta;
+        else delete d.meta[prayer];
+      });
+    },
+    /** Mark or unmark a day spent travelling. */
+    setTravelDay(date, travelling) {
+      if (Boolean(days[date]?.travel) === Boolean(travelling)) return;
+      update(date, (d) => {
+        if (travelling) d.travel = true;
+        else delete d.travel;
       });
     },
     setSunnah(date, name, done) {

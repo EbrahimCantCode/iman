@@ -16,7 +16,7 @@ import {
   tripToOffer,
 } from '../travel.js';
 import { validCoords } from '../location.js';
-import { ymd } from '../time.js';
+import { ymd, addDays } from '../time.js';
 import {
   pickPlace,
   gpsPlace,
@@ -86,8 +86,19 @@ export function createTravelController(ctx) {
     });
   }
 
+  /** Mark every day of the current trip (up to today) as a travel day in the tracker. */
+  function markTravelDays() {
+    const cur = store.current();
+    if (!active() || !cur) return;
+    const end = today();
+    for (let d = cur.startDate, n = 0; d <= end && n < 400; d = addDays(d, 1), n++) {
+      ctx.tracker.setTravelDay(d, true);
+    }
+  }
+
   /** Called whenever the location changes or the app opens. */
   function observe() {
+    markTravelDays();
     const cur = store.current();
     if (!active() || !cur || cur.wasAway) return;
     const d = distanceFromHome(home(), here(), rules());
@@ -113,6 +124,7 @@ export function createTravelController(ctx) {
     });
     ctx.settings.set('travel.enabled', true);
     changing = false;
+    markTravelDays();
   }
 
   /** Turn travel mode off. Remembers where, so it isn't suggested again on the spot. */
@@ -144,6 +156,7 @@ export function createTravelController(ctx) {
         startDate: today(),
         wasAway: Boolean(distanceFromHome(home(), here(), rules())?.away),
       });
+      markTravelDays();
       openStartSheet();
     } else if (!v['travel.enabled'] && store.current()) {
       const p = here();
@@ -539,6 +552,7 @@ export function createTravelController(ctx) {
     today,
     suggestion,
     observe,
+    markTravelDays,
     start,
     end,
     toggle,

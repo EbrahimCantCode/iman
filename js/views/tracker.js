@@ -5,7 +5,15 @@ import { h, clear, openDialog, nextId } from '../ui.js';
 import { icon } from '../icons.js';
 import { t, tn, fmtNum, fmtDate, currentLanguage } from '../i18n/index.js';
 import { PRAYERS, STATUSES, SUNNAH, AR_NAMES } from '../config/constants.js';
-import { computeStreaks, completion, lastDates, nextStatus, weekStartDate } from '../tracker.js';
+import {
+  computeStreaks,
+  completion,
+  lastDates,
+  nextStatus,
+  weekStartDate,
+  countTravelDays,
+} from '../tracker.js';
+import { COMBINE_PAIRS, SHORTENED_PRAYERS } from '../config/travel-rules.js';
 import { ymd, weekdayOf, addDays, parseYmd } from '../time.js';
 
 /** Noon UTC of a calendar day, for formatting dates without zone shifts. */
@@ -141,12 +149,112 @@ export function openDayEditor(ctx, date) {
     }
     if (day.wake)
       content.append(h('p', { class: 'hint', text: t('tracker.wake', { time: day.wake }) }));
+    if (day.travel || day.meta || ctx.travel?.active())
+      content.append(travelFlags(ctx, date, day, render));
   };
   render();
   openDialog({
     title: fmtDate(dateOf(date), 'UTC', { weekday: 'long', day: 'numeric', month: 'long' }),
     content,
   });
+}
+
+/** Travel flags in the day editor: travel day, shortened, combined (and how). */
+function travelFlags(ctx, date, day, rerender) {
+  const box = h(
+    'div',
+    { class: 'day-travel' },
+    h('h3', { class: 'set-group-title', text: t('tracker.travel') }),
+  );
+  const travelId = nextId('tv');
+  const travelSwitch = h('input', {
+    type: 'checkbox',
+    role: 'switch',
+    class: 'switch',
+    id: travelId,
+    checked: Boolean(day.travel),
+    onchange: () => {
+      ctx.tracker.setTravelDay(date, travelSwitch.checked);
+      rerender();
+    },
+  });
+  box.append(
+    h(
+      'div',
+      { class: 'set-row' },
+      h(
+        'label',
+        { class: 'set-row-text', for: travelId },
+        h('span', { class: 'set-row-label', text: t('tracker.travelDay') }),
+      ),
+      travelSwitch,
+    ),
+  );
+  for (const p of PRAYERS) {
+    if (!day[p]) continue;
+    const meta = day.meta?.[p] ?? {};
+    const pair = COMBINE_PAIRS.find((x) => x.includes(p));
+    if (!SHORTENED_PRAYERS.includes(p) && !pair) continue;
+    const row = h(
+      'div',
+      { class: 'day-flags' },
+      h('span', { class: 'day-row-label', text: prayerName(p) }),
+    );
+    if (SHORTENED_PRAYERS.includes(p)) {
+      const id = nextId('sh');
+      const cb = h('input', {
+        type: 'checkbox',
+        id,
+        checked: Boolean(meta.shortened),
+        onchange: () => {
+          ctx.tracker.setMeta(date, p, { ...meta, shortened: cb.checked || undefined });
+          rerender();
+        },
+      });
+      row.append(
+        h('label', { class: 'check', for: id }, cb, h('span', { text: t('tracker.shortened') })),
+      );
+    }
+    if (pair) {
+      const partner = pair.find((x) => x !== p);
+      const id = nextId('cb');
+      const value = meta.combinedWith ? (meta.combineType ?? 'early') : 'none';
+      const select = h(
+        'select',
+        {
+          id,
+          class: 'input',
+          onchange: () => {
+            const v = select.value;
+            const { combinedWith: _c, combineType: _t, ...rest } = meta;
+            ctx.tracker.setMeta(
+              date,
+              p,
+              v === 'none' ? rest : { ...rest, combinedWith: partner, combineType: v },
+            );
+            rerender();
+          },
+        },
+        ['none', 'early', 'delayed'].map((o) =>
+          h('option', {
+            value: o,
+            text: t(`tracker.combined.${o}`, { prayer: prayerName(partner) }),
+          }),
+        ),
+      );
+      select.value = value;
+      row.append(
+        h('label', {
+          class: 'visually-hidden',
+          for: id,
+          text: t('tracker.combinedLabel', { prayer: prayerName(p) }),
+        }),
+        select,
+      );
+    }
+    box.append(row);
+  }
+  return box;
 }
 
 export function createTrackerView(ctx) {
@@ -166,7 +274,11 @@ export function createTrackerView(ctx) {
 
     const schedule = ctx.schedule();
     // Days before tracking started don't count against you.
-    const since = Object.keys(days).sort()[0] ?? today;
+    // (Days with only a travel flag or Sunnah don't start tracking.)
+    const since =
+      Object.keys(days)
+        .filter((d) => PRAYERS.some((p) => days[d][p]))
+        .sort()[0] ?? today;
     const isDue = (d, p) => {
       if (d < since) return false;
       if (d < today) return true;
@@ -180,6 +292,7 @@ export function createTrackerView(ctx) {
       isDue,
     );
     const last7 = completion(days, lastDates(today, 7), isDue);
+    const travelDays = countTravelDays(days, lastDates(today, 30));
     const pct = (r) =>
       r.total ? fmtNum(r.ratio, { style: 'percent', maximumFractionDigits: 0 }) : '—';
 
@@ -204,6 +317,9 @@ export function createTrackerView(ctx) {
           t('tracker.ofPrayers', { done: week.done, total: week.total }),
           t('tracker.thisWeek'),
         ),
+        travelDays
+          ? stat(fmtNum(travelDays), tn('tracker.daysUnit', travelDays), t('tracker.travelDays'))
+          : null,
       ),
     );
 
@@ -247,7 +363,10 @@ export function createTrackerView(ctx) {
       const label = [
         fmtDate(dateOf(d), 'UTC', { weekday: 'long', day: 'numeric', month: 'long' }),
         ...PRAYERS.map((p) => `${prayerName(p)}: ${t(`status.${day[p] ?? 'none'}`)}`),
-      ].join(', ');
+        day.travel ? t('tracker.travelDay') : null,
+      ]
+        .filter(Boolean)
+        .join(', ');
       cols.append(
         h(
           'button',
@@ -263,6 +382,7 @@ export function createTrackerView(ctx) {
           },
           PRAYERS.map((p) => h('span', { class: ['hm-cell', `is-${day[p] ?? 'none'}`] })),
           h('span', { class: 'hm-date', text: fmtNum(parseYmd(d).day) }),
+          day.travel ? h('span', { class: 'hm-travel', 'aria-hidden': 'true', text: '✈' }) : null,
         ),
       );
     }

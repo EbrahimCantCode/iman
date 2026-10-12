@@ -11,6 +11,10 @@ import {
   weekStartDate,
   parseTrackerImport,
   createTracker,
+  migrateTracker,
+  validateMeta,
+  countTravelDays,
+  TRACKER_VERSION,
 } from '../js/tracker.js';
 import { createMemoryStorage } from '../js/storage.js';
 import { weekdayOf } from '../js/time.js';
@@ -180,5 +184,100 @@ describe('tracker store', () => {
     const storage = createMemoryStorage();
     storage.setItem('iman.tracker', '{"version":1,"days":{"x":{"fajr":"prayed"}}}');
     assert.deepEqual(createTracker({ storage }).all(), {});
+  });
+});
+
+describe('travel flags and migration', () => {
+  test('version 1 records still load and count the same', () => {
+    const storage = createMemoryStorage();
+    const v1 = {
+      version: 1,
+      days: {
+        '2026-10-10': all('prayed'),
+        '2026-10-11': all('prayed'),
+        '2026-10-12': { fajr: 'late' },
+      },
+    };
+    storage.setItem('iman.tracker', JSON.stringify(v1));
+    const tr = createTracker({ storage });
+    assert.deepEqual(tr.all(), v1.days);
+    assert.deepEqual(computeStreaks(tr.all(), '2026-10-12'), { current: 2, best: 2 });
+    assert.deepEqual(migrateTracker(v1), v1.days);
+    assert.deepEqual(migrateTracker({ days: v1.days }), v1.days); // unversioned = v1
+    tr.setStatus('2026-10-12', 'dhuhr', 'prayed');
+    assert.equal(JSON.parse(storage.getItem('iman.tracker')).version, TRACKER_VERSION);
+  });
+
+  test('flags are validated', () => {
+    assert.deepEqual(
+      validateMeta('dhuhr', { shortened: true, combinedWith: 'asr', combineType: 'early' }),
+      {
+        shortened: true,
+        combinedWith: 'asr',
+        combineType: 'early',
+      },
+    );
+    assert.equal(validateMeta('fajr', { shortened: true }), null); // Fajr is never shortened
+    assert.equal(validateMeta('maghrib', { combinedWith: 'asr' }), null); // wrong partner
+    assert.deepEqual(validateMeta('isha', { combinedWith: 'maghrib', combineType: 'sideways' }), {
+      combinedWith: 'maghrib',
+    });
+    assert.equal(validateMeta('asr', 'junk'), null);
+    const { days } = validateDays({
+      '2026-10-12': {
+        dhuhr: 'prayed',
+        travel: true,
+        meta: { dhuhr: { shortened: true }, asr: { shortened: true } },
+      },
+    });
+    // Flags for a prayer without a status are dropped.
+    assert.deepEqual(days['2026-10-12'], {
+      dhuhr: 'prayed',
+      travel: true,
+      meta: { dhuhr: { shortened: true } },
+    });
+  });
+
+  test('setting, keeping and clearing flags', () => {
+    const tr = createTracker({ storage: createMemoryStorage() });
+    const d = '2026-10-12';
+    tr.setStatus(d, 'dhuhr', 'prayed', {
+      shortened: true,
+      combinedWith: 'asr',
+      combineType: 'early',
+    });
+    tr.setStatus(d, 'dhuhr', 'late'); // undefined meta keeps the flags
+    assert.equal(tr.getDay(d).meta.dhuhr.combineType, 'early');
+    tr.setStatus(d, 'dhuhr', 'prayed', null); // null clears them
+    assert.equal(tr.getDay(d).meta, undefined);
+    tr.setStatus(d, 'asr', 'prayed', { shortened: true });
+    tr.setStatus(d, 'asr', null); // clearing the status clears its flags
+    assert.equal(tr.getDay(d).asr, undefined);
+    assert.equal(tr.getDay(d).meta, undefined);
+  });
+
+  test('combined and shortened prayers count as on time for streaks', () => {
+    const combinedDay = {
+      ...all('prayed'),
+      travel: true,
+      meta: {
+        dhuhr: { shortened: true, combinedWith: 'asr', combineType: 'delayed' },
+        asr: { shortened: true, combinedWith: 'dhuhr', combineType: 'delayed' },
+        isha: { shortened: true },
+      },
+    };
+    const days = { '2026-10-11': combinedDay, '2026-10-12': combinedDay };
+    assert.equal(computeStreaks(days, '2026-10-12', 'onTime').current, 2);
+    assert.equal(computeStreaks(days, '2026-10-12', 'prayedOrLate').current, 2);
+  });
+
+  test('travel days', () => {
+    const tr = createTracker({ storage: createMemoryStorage() });
+    tr.setTravelDay('2026-10-10', true);
+    tr.setTravelDay('2026-10-11', true);
+    tr.setTravelDay('2026-10-11', false);
+    tr.setTravelDay('2026-10-12', true);
+    assert.equal(countTravelDays(tr.all(), lastDates('2026-10-12', 30)), 2);
+    assert.equal(countTravelDays(tr.all(), ['2026-10-12']), 1);
   });
 });
